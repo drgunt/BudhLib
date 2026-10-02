@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3d5a3a">
+<title>BudhLib · จองห้องประชุม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#3d5a3a; --green-2:#557a4f; --green-soft:#e7efe4; --wood:#d9bf98; --wood-soft:#f6efe4;
+  --bg:#f4f1ec; --card:#ffffff; --ink:#1f2a1e; --muted:#6b7468; --line:#e3ddd2;
+  --ok:#22995a; --ok-soft:#e3f5ea; --busy:#d64545; --busy-soft:#fdeaea; --mine:#d98a10; --mine-soft:#fdf2df;
+  --sel:#2563eb; --sel-soft:#e6eeff; --radius:14px; --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 20px rgba(40,50,30,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"IBM Plex Sans Thai",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:0;z-index:30;background:var(--green);color:#fff;display:flex;align-items:center;gap:16px;padding:10px 20px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:#fff;color:var(--green);display:grid;place-items:center;font-weight:700;flex:none}
+.brand b{display:block;font-size:16px;line-height:1.2}
+.brand small{display:block;opacity:.8;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav.tabs{display:flex;gap:4px;margin-left:auto}
+nav.tabs a{color:#fff;text-decoration:none;padding:7px 14px;border-radius:999px;opacity:.85;font-weight:500;white-space:nowrap}
+nav.tabs a:hover{background:rgba(255,255,255,.12);opacity:1}
+nav.tabs a.on{background:#fff;color:var(--green);opacity:1}
+.userchip{display:flex;align-items:center;gap:8px;font-size:13px;white-space:nowrap}
+.userchip .av{width:30px;height:30px;border-radius:50%;background:var(--wood);color:var(--green);display:grid;place-items:center;font-weight:700}
+.userchip button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:8px;padding:5px 10px}
+.clock{font-variant-numeric:tabular-nums;font-size:12px;opacity:.85}
+.clock.fake{background:#f5c24a;color:#3a2a00;padding:2px 8px;border-radius:999px;opacity:1;font-weight:600}
+nav.bottom{display:none}
+
+main{max-width:1180px;margin:0 auto;padding:22px 20px 40px}
+main.wide{max-width:none;padding:0}
+h1{font-size:24px;margin:0 0 4px}
+h2{font-size:18px;margin:0 0 12px}
+.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.grid{display:grid;gap:16px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted);font-weight:500}
+input[type=text],input[type=password],input[type=date],input[type=number],input[type=datetime-local],select{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-size:15px;min-width:0;color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--green-2);outline-offset:0;border-color:transparent}
+.btn{border:0;border-radius:10px;padding:10px 18px;font-weight:600;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .05s,filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.btn.ghost{background:transparent;color:var(--green);border:1px solid var(--line)}
+.btn.soft{background:var(--green-soft);color:var(--green)}
+.btn.warn{background:var(--busy-soft);color:var(--busy)}
+.btn.blue{background:var(--sel)}
+.btn.door{background:linear-gradient(135deg,#22995a,#1a7a48);font-size:16px;padding:12px 20px}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:8px}
+.btn.block{width:100%}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.busy{background:var(--busy-soft);color:var(--busy)}
+.pill.mine{background:var(--mine-soft);color:var(--mine)}
+.pill.gray{background:#eceae5;color:var(--muted)}
+.pill.blue{background:var(--sel-soft);color:var(--sel)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.muted{color:var(--muted)}
+.notice{border-radius:12px;padding:12px 14px;font-size:14px}
+.notice.warn{background:#fff6e0;color:#7a5200}
+.notice.err{background:var(--busy-soft);color:#9b2c2c}
+.notice.info{background:var(--green-soft);color:var(--green)}
+
+/* ---------- login ---------- */
+#view-login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:var(--bg)}
+.login-hero{background:linear-gradient(160deg,rgba(61,90,58,.92),rgba(37,58,35,.96)),url('docs/ref-render-meeting-room.webp') center/cover;color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:flex-end}
+.login-hero h1{font-size:34px;line-height:1.25;margin-bottom:10px}
+.login-hero p{opacity:.85;max-width:520px}
+.login-hero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.login-hero .chips span{background:rgba(255,255,255,.14);padding:6px 12px;border-radius:999px;font-size:13px}
+.login-box{display:grid;place-items:center;padding:32px 20px}
+.login-box form{width:100%;max-width:380px;display:grid;gap:14px}
+.login-box .logo{width:52px;height:52px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:700;font-size:22px}
+.demo-users{font-size:13px;color:var(--muted);background:var(--wood-soft);border-radius:10px;padding:10px 12px}
+.demo-users code{background:#fff;padding:1px 6px;border-radius:5px;color:var(--ink)}
+
+/* ---------- search ---------- */
+.search-card{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:12px;align-items:end}
+.steps{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.steps span{font-size:12px;color:var(--muted);background:var(--wood-soft);padding:3px 10px;border-radius:999px}
+.steps span b{color:var(--green)}
+.result-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:24px 0 14px}
+.bignum{font-size:44px;font-weight:700;color:var(--green);line-height:1}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tcard{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:10px;border:2px solid transparent;text-align:left;transition:border-color .15s,transform .15s}
+.tcard:hover{border-color:var(--green-2);transform:translateY(-2px)}
+.tcard .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--green-soft);color:var(--green)}
+.tcard .ttl{font-weight:700;font-size:17px}
+.tcard .cnt{font-size:28px;font-weight:700}
+.tcard .cnt small{font-size:14px;color:var(--muted);font-weight:500}
+.tcard .meta{font-size:13px;color:var(--muted)}
+.tcard .go{margin-top:auto;color:var(--green);font-weight:600;font-size:14px}
+.tcard.zero .cnt{color:var(--busy)}
+.roomdots{display:flex;gap:5px;flex-wrap:wrap}
+.roomdots i{font-style:normal;font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px}
+.roomdots i.ok{background:var(--ok-soft);color:var(--ok)}
+.roomdots i.busy{background:var(--busy-soft);color:var(--busy)}
+
+/* ---------- 3D map ---------- */
+#view-map{display:grid;grid-template-columns:1fr 380px;height:calc(100vh - 58px)}
+#stage{position:relative;overflow:hidden;background:linear-gradient(#eef0ea,#dfe3d8)}
+#stage canvas{display:block}
+#labels{position:absolute;inset:0;pointer-events:none;z-index:1}
+.stage-tools{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:5}
+.stage-tools button{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:13px;font-weight:500;box-shadow:var(--shadow)}
+.stage-tools button.on{background:var(--green);color:#fff;border-color:var(--green)}
+.legend{position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,.92);border-radius:10px;padding:8px 12px;font-size:12px;display:flex;gap:12px;flex-wrap:wrap;box-shadow:var(--shadow);z-index:5}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.stage-hint{position:absolute;top:12px;right:12px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.85);padding:5px 10px;border-radius:8px;z-index:5}
+.zlabel{font-size:11px;font-weight:600;color:#3b4a36;background:rgba(255,255,255,.82);padding:1px 7px;border-radius:6px;white-space:nowrap;transform:translateY(-4px)}
+.zlabel b{background:#2c6e8f;color:#fff;border-radius:4px;padding:0 5px;margin-right:4px}
+.rlabel{pointer-events:auto;cursor:pointer;font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;color:#fff;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.2);user-select:none}
+.rlabel small{display:block;font-weight:500;font-size:10px;opacity:.9;text-align:center}
+.rlabel.ok{background:var(--ok)} .rlabel.busy{background:var(--busy)} .rlabel.mine{background:var(--mine)}
+.rlabel.off{background:#9aa095;opacity:.75}
+.rlabel.sel{background:var(--sel);outline:3px solid rgba(37,99,235,.35);font-size:12px}
+aside.panel{background:var(--card);border-left:1px solid var(--line);overflow-y:auto;display:flex;flex-direction:column}
+.panel .sec{padding:16px 18px;border-bottom:1px solid var(--line)}
+.panel .mini{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+.panel .mini select,.panel .mini input{padding:8px 8px;font-size:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.chip b{font-weight:700}
+.rlist{display:grid;gap:8px}
+.ritem{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;border:1.5px solid var(--line);background:#fff;text-align:left;width:100%}
+.ritem:hover{border-color:var(--green-2)}
+.ritem.sel{border-color:var(--sel);background:var(--sel-soft)}
+.ritem .code{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex:none}
+.ritem .code.ok{background:var(--ok)} .ritem .code.busy{background:var(--busy)} .ritem .code.mine{background:var(--mine)}
+.ritem .nm{font-weight:600;font-size:14px}
+.ritem .ds{font-size:12px;color:var(--muted)}
+.ritem .pill{margin-left:auto}
+.detail h3{margin:0;font-size:18px}
+.detail .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px;margin:12px 0}
+.detail .kv dt{color:var(--muted)} .detail .kv dd{margin:0;font-weight:500}
+.tl{display:grid;gap:2px;margin:8px 0 4px}
+.tl .cells{display:flex;gap:2px}
+.tl .cells i{flex:1;height:18px;border-radius:3px;background:var(--ok-soft)}
+.tl .cells i.b{background:#f4a9a9} .tl .cells i.m{background:#f2c879} .tl .cells i.q{background:var(--sel)} .tl .cells i.x{background:#e4e2dd}
+.tl .ticks{display:flex;font-size:10px;color:var(--muted)} .tl .ticks span{flex:1}
+.sticky-book{position:sticky;bottom:0;background:var(--card);padding:14px 18px;border-top:1px solid var(--line);margin-top:auto}
+
+/* ---------- my bookings ---------- */
+.seg{display:inline-flex;background:#e9e5dd;border-radius:12px;padding:4px;gap:4px;margin-bottom:16px}
+.seg button{border:0;background:transparent;padding:8px 16px;border-radius:9px;font-weight:600;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--green);box-shadow:var(--shadow)}
+.bk{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.bk .datebox{width:64px;text-align:center;background:var(--green-soft);color:var(--green);border-radius:12px;padding:8px 4px;line-height:1.15}
+.bk .datebox b{display:block;font-size:24px}
+.bk .datebox small{font-size:12px}
+.bk .ttl{font-weight:700;font-size:16px}
+.bk .meta{font-size:14px;color:var(--muted)}
+.bk .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.bk.past{opacity:.82}
+.bk.past .datebox{background:#eceae5;color:var(--muted)}
+.bk .doorinfo{font-size:13px;margin-top:4px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+
+/* ---------- admin ---------- */
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.admin-grid .full{grid-column:1/-1}
+.wd{display:flex;gap:6px;flex-wrap:wrap}
+.wd label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:14px;cursor:pointer}
+.wd label:has(input:checked){background:var(--busy-soft);border-color:#f0b7b7;color:var(--busy)}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;padding:8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 8px;border-bottom:1px solid #f0ece5;vertical-align:middle}
+.tblwrap{overflow-x:auto}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:13px}
+.cal .h{color:var(--muted);font-size:11px}
+.cal button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 0;font-variant-numeric:tabular-nums}
+.cal button.closed{background:var(--busy);color:#fff;border-color:var(--busy)}
+.cal button.wk{background:var(--busy-soft);color:var(--busy)}
+.cal button.today{outline:2px solid var(--green-2)}
+.cal button:disabled{opacity:.35}
+.setrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0ece5}
+.setrow:last-child{border-bottom:0}
+.setrow .lbl b{display:block} .setrow .lbl small{color:var(--muted)}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:none}
+.stepper button{border:0;background:#f4f1ec;width:36px;height:38px;font-size:18px}
+.stepper input{border:0;width:58px;text-align:center;border-radius:0;padding:8px 0}
+
+/* ---------- modal / toast ---------- */
+.modal{position:fixed;inset:0;background:rgba(20,28,18,.5);display:grid;place-items:center;z-index:100;padding:16px;animation:fade .15s}
+.modal .box{background:#fff;border-radius:18px;max-width:440px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:pop .18s;max-height:90vh;overflow:auto}
+.modal h3{margin:0 0 6px;font-size:19px}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+@keyframes fade{from{opacity:0}} @keyframes pop{from{transform:scale(.96);opacity:0}}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:200;display:grid;gap:8px;pointer-events:none}
+#toast div{background:#1f2a1e;color:#fff;padding:10px 18px;border-radius:12px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:pop .2s}
+#toast div.err{background:#9b2c2c}
+.doorani{width:120px;height:150px;margin:6px auto 12px;position:relative;perspective:400px}
+.doorani .frame{position:absolute;inset:0;border:6px solid var(--green);border-bottom:0;border-radius:60px 60px 0 0;background:#fdf8ef;overflow:hidden}
+.doorani .leaf{position:absolute;inset:6px 6px 0 6px;background:linear-gradient(90deg,#d9bf98,#c9a978);border-radius:54px 54px 0 0;transform-origin:left center;animation:open 1.1s .25s ease forwards}
+.doorani .leaf:after{content:"";position:absolute;right:12px;top:55%;width:8px;height:8px;border-radius:50%;background:#3d5a3a}
+.doorani .light{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--ok);box-shadow:0 0 16px var(--ok)}
+@keyframes open{to{transform:rotateY(-75deg)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  #view-login{grid-template-columns:1fr}
+  .login-hero{padding:28px 20px;min-height:220px}
+  .login-hero h1{font-size:24px}
+  header.top{padding:8px 14px}
+  nav.tabs{display:none}
+  .userchip .nm{display:none}
+  .clock:not(.fake){display:none}
+  .legend{font-size:11px;gap:8px;padding:6px 10px;right:12px}
+  .zlabel{font-size:10px;padding:1px 3px}
+  .zlabel span{display:none}
+  .rlabel{padding:2px 6px}
+  .rlabel .rx,.rlabel small{display:none}
+  .zlabel b{margin:0}
+  .brand small{max-width:52vw}
+  nav.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  nav.bottom a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:11px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0}
+  nav.bottom a svg{width:22px;height:22px}
+  nav.bottom a.on{color:var(--green);font-weight:700}
+  main{padding:16px 14px 90px}
+  .search-card{grid-template-columns:1fr 1fr}
+  .search-card .d{grid-column:1/-1}
+  .search-card .btn{grid-column:1/-1}
+  .types{grid-template-columns:1fr}
+  .tcard{flex-direction:row;flex-wrap:wrap;align-items:center}
+  #view-map{grid-template-columns:1fr;height:auto}
+  #stage{height:58vh}
+  aside.panel{border-left:0;padding-bottom:70px}
+  .sticky-book{bottom:62px}
+  .bk{grid-template-columns:auto 1fr}
+  .bk .acts{grid-column:1/-1;justify-content:stretch}
+  .bk .acts .btn{flex:1}
+  .admin-grid{grid-template-columns:1fr}
+  .stage-hint{display:none}
+  #toast{bottom:84px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<section id="view-login" class="hidden">
+  <div class="login-hero">
+    <h1>ระบบจองห้องประชุม<br>ห้องสมุดศูนย์แพทยศาสตรศึกษาชั้นคลินิก</h1>
+    <p>โรงพยาบาลพุทธชินราช พิษณุโลก · ค้นหาห้องว่าง ดูผัง 3 มิติ จอง และกดเปิดประตูได้จากมือถือ</p>
+    <div class="chips"><span>ห้องใหญ่ 1 ห้อง</span><span>ห้องกลาง 2 ห้อง</span><span>ห้องเล็ก 5 ห้อง</span><span>Zone A · open 24 hours</span></div>
+  </div>
+  <div class="login-box">
+    <form id="loginForm" autocomplete="off">
+      <div class="logo">พ</div>
+      <div><h1>เข้าสู่ระบบ</h1><p class="sub" style="margin:0">ใช้รหัสผู้ใช้ของห้องสมุด</p></div>
+      <label class="f">รหัสผู้ใช้ (User ID)<input type="text" id="lgUser" required autocapitalize="none"></label>
+      <label class="f">รหัสผ่าน<input type="password" id="lgPw" required></label>
+      <div id="lgErr" class="notice err hidden"></div>
+      <button class="btn block" type="submit">เข้าสู่ระบบ</button>
+      <div class="demo-users">บัญชีทดลอง (รหัสผ่าน <code>1234</code> ทุกบัญชี)<br>
+        ผู้ใช้: <code>user</code> · <code>doctor01</code> · <code>nurse01</code> · <code>student02</code><br>ผู้ดูแล: <code>admin</code></div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="shell" class="hidden">
+  <header class="top">
+    <div class="brand"><div class="logo">พ</div><div><b>จองห้องประชุม · ห้องสมุด</b><small>ศูนย์แพทยศาสตรศึกษาชั้นคลินิก รพ.พุทธชินราช พิษณุโลก</small></div></div>
+    <nav class="tabs" id="topnav"></nav>
+    <div class="userchip"><span class="clock" id="clock"></span><div class="av" id="uAv"></div><span class="nm" id="uName"></span><button id="logoutBtn" title="ออกจากระบบ">ออก</button></div>
+  </header>
+
+  <!-- SEARCH -->
+  <main id="view-search" class="hidden">
+    <h1>ค้นหาห้องว่าง</h1>
+    <p class="sub">เลือกวันที่และช่วงเวลา แล้วกดค้นหา ระบบจะแสดงจำนวนห้องที่ว่าง</p>
+    <div class="card">
+      <div class="steps"><span><b>1</b> เลือกวันที่</span><span><b>2</b> เลือกเวลา</span><span><b>3</b> กดค้นหา</span><span><b>4</b> เลือกห้องในผัง 3D แล้วจอง</span></div>
+      <form class="search-card" id="searchForm">
+        <label class="f d">วันที่<input type="date" id="sDate" required></label>
+        <label class="f">เวลาเริ่ม<select id="sStart"></select></label>
+        <label class="f">ระยะเวลา<select id="sHours"></select></label>
+        <button class="btn" type="submit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>ค้นหา</button>
+      </form>
+      <div id="sNote" class="muted" style="font-size:13px;margin-top:10px"></div>
+    </div>
+    <div id="results"></div>
+  </main>
+
+  <!-- 3D MAP -->
+  <section id="view-map" class="hidden">
+    <div id="stage">
+      <div id="labels"></div>
+      <div class="stage-tools">
+        <button id="tReset">มุมมองเริ่มต้น</button>
+        <button id="tTop">มองจากด้านบน</button>
+        <button id="tWalls">ผนังเตี้ย</button>
+      </div>
+      <div class="stage-hint">ลากเพื่อหมุน · เลื่อนล้อ/ถ่างนิ้วเพื่อซูม · คลิกห้องเพื่อเลือก</div>
+      <div class="legend">
+        <span><i style="background:var(--ok)"></i>ว่าง</span>
+        <span><i style="background:var(--busy)"></i>ไม่ว่าง</span>
+        <span><i style="background:var(--mine)"></i>การจองของฉัน</span>
+        <span><i style="background:var(--sel)"></i>ที่เลือก</span>
+        <span><i style="background:#9aa095"></i>ไม่ตรงประเภท</span>
+      </div>
+    </div>
+    <aside class="panel">
+      <div class="sec">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px"><b>ช่วงเวลาที่ต้องการ</b><span id="mClosed"></span></div>
+        <div class="mini">
+          <input type="date" id="mDate">
+          <select id="mStart"></select>
+          <select id="mHours"></select>
+        </div>
+      </div>
+      <div class="sec">
+        <b style="display:block;margin-bottom:8px">ประเภทห้อง</b>
+        <div class="chips" id="typeChips"></div>
+      </div>
+      <div class="sec">
+        <b style="display:block;margin-bottom:8px">เลือกห้อง</b>
+        <div class="rlist" id="roomList"></div>
+      </div>
+      <div class="sec detail" id="roomDetail"></div>
+      <div class="sticky-book"><button class="btn block" id="bookBtn" disabled>เลือกห้องที่ว่างเพื่อจอง</button></div>
+    </aside>
+  </section>
+
+  <!-- MY BOOKINGS -->
+  <main id="view-mine" class="hidden">
+    <h1>ข้อมูลการจองของฉัน</h1>
+    <p class="sub" id="mineSub"></p>
+    <div class="seg"><button data-t="up" class="on">ยังไม่ถึง / กำลังใช้</button><button data-t="past">ผ่านไปแล้ว</button></div>
+    <div class="grid" id="mineList"></div>
+  </main>
+
+  <!-- ADMIN -->
+  <main id="view-admin" class="hidden">
+    <h1>ผู้ดูแลระบบ</h1>
+    <p class="sub">ตั้งค่ากติกาการจอง วันปิดห้องสมุด และดูการจองทั้งหมด</p>
+    <div class="admin-grid">
+      <div class="card">
+        <h2>กติกาการจอง</h2>
+        <div class="setrow"><div class="lbl"><b>จองได้สูงสุดต่อวัน (ชั่วโมง / 1 ID)</b><small>ค่าเริ่มต้น 1 ชั่วโมง</small></div>
+          <div class="stepper"><button data-step="maxHoursPerDay" data-d="-1">−</button><input type="number" id="aMax" min="1" max="24"><button data-step="maxHoursPerDay" data-d="1">+</button></div></div>
+        <div class="setrow"><div class="lbl"><b>กดเปิดประตูล่วงหน้าได้ (นาที)</b><small>ค่าเริ่มต้น 10 นาที · ใช้ได้เมื่อห้องว่างก่อนหน้า</small></div>
+          <div class="stepper"><button data-step="openBeforeMin" data-d="-5">−</button><input type="number" id="aBefore" min="0" max="120"><button data-step="openBeforeMin" data-d="5">+</button></div></div>
+        <div class="setrow"><div class="lbl"><b>เวลาเปิดให้จอง</b><small>Zone A เปิด 24 ชั่วโมง (00:00–24:00)</small></div>
+          <div class="row"><select id="aOpen"></select>–<select id="aClose"></select></div></div>
+        <div id="aRuleEx" class="notice info" style="margin-top:10px"></div>
+      </div>
+      <div class="card">
+        <h2>วันที่ห้องสมุดปิด</h2>
+        <b style="font-size:14px">ปิดประจำทุกสัปดาห์</b>
+        <div class="wd" id="aWeek" style="margin:8px 0 16px"></div>
+        <div class="row" style="justify-content:space-between"><b style="font-size:14px">ปิดเฉพาะวัน (คลิกวันในปฏิทินเพื่อเปิด/ปิด)</b>
+          <div class="row"><button class="btn ghost sm" id="calPrev">‹</button><b id="calTitle" style="min-width:110px;text-align:center"></b><button class="btn ghost sm" id="calNext">›</button></div></div>
+        <div class="cal" id="cal" style="margin-top:8px"></div>
+        <div id="closedList" style="margin-top:12px"></div>
+      </div>
+      <div class="card full">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">การจองทั้งหมด</h2>
+          <div class="row"><input type="date" id="aBkDate"><button class="btn ghost sm" id="aBkAll">ทุกวัน</button></div></div>
+        <div class="tblwrap"><table class="tbl" id="aBkTbl"></table></div>
+      </div>
+      <div class="card">
+        <h2>ประวัติการเปิดประตู</h2>
+        <div class="tblwrap" style="max-height:300px;overflow:auto"><table class="tbl" id="aDoorTbl"></table></div>
+      </div>
+      <div class="card">
+        <h2>เครื่องมือทดสอบ</h2>
+        <p class="muted" style="font-size:14px;margin-top:0">จำลองเวลาของระบบ เพื่อทดสอบปุ่มเปิดประตู/การจองที่ผ่านไปแล้ว</p>
+        <div class="row"><input type="datetime-local" id="aFake" step="60"><button class="btn sm" id="aFakeSet">ตั้งเวลาจำลอง</button><button class="btn ghost sm" id="aFakeOff">ใช้เวลาจริง</button></div>
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+        <button class="btn warn sm" id="aReset">ล้างข้อมูลทดลองทั้งหมด</button>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom" id="botnav"></nav>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toast"></div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+/* =========================================================
+   ข้อมูลพื้นฐาน (จำลอง) — ระบบจริงต้องย้ายไปฝั่ง server
+   ========================================================= */
+const USERS = [
+  { id:'user',      pw:'1234', name:'ผู้ใช้ทดสอบ',      dept:'นักศึกษาแพทย์ ชั้นปีที่ 5', role:'user' },
+  { id:'doctor01',  pw:'1234', name:'พญ.ทดสอบ หนึ่ง',  dept:'แพทย์ใช้ทุน',             role:'user' },
+  { id:'nurse01',   pw:'1234', name:'พยาบาล ทดสอบ',     dept:'ฝ่ายการพยาบาล',           role:'user' },
+  { id:'student02', pw:'1234', name:'นศพ.ทดสอบ สอง',    dept:'นักศึกษาแพทย์ ชั้นปีที่ 6', role:'user' },
+  { id:'admin',     pw:'1234', name:'ผู้ดูแลระบบ',      dept:'งานห้องสมุด',             role:'admin' },
+];
+const userById = id => USERS.find(u => u.id === id);
+
+const TYPES = {
+  L:{ label:'ห้องใหญ่', cap:'12–16 คน', equip:'จอ 75" · ไมโครโฟน · VDO Conference', icon:'L' },
+  M:{ label:'ห้องกลาง', cap:'10–12 คน', equip:'จอ 65" · ระบบประชุมออนไลน์ · ไวท์บอร์ด', icon:'M' },
+  S:{ label:'ห้องเล็ก', cap:'4–6 คน',   equip:'จอ TV 43" · ไวท์บอร์ด', icon:'S' },
+};
+// px = พิกัดบนรูปแปลน (docs/ref-floorplan.webp) ~36 px ต่อ 1 เมตร ; front = ด้านที่ติดโถงทางเดิน
+const ROOMS = [
+  { id:'S1', type:'S', name:'Meeting Room 1', px:[475,715,568,835], front:'n', size:'2.65 × 3.40 ม.' },
+  { id:'S2', type:'S', name:'Meeting Room 2', px:[568,715,662,835], front:'n', size:'2.70 × 3.40 ม.' },
+  { id:'S3', type:'S', name:'Meeting Room 3', px:[662,715,757,835], front:'n', size:'2.65 × 3.40 ม.' },
+  { id:'S4', type:'S', name:'Meeting Room 4', px:[757,715,855,835], front:'n', size:'2.75 × 3.40 ม.' },
+  { id:'S5', type:'S', name:'Meeting Room 5', px:[855,715,948,835], front:'n', size:'2.60 × 3.40 ม.' },
+  { id:'M1', type:'M', name:'Conference Room 6', px:[948,715,1135,835], front:'n', size:'5.25 × 3.40 ม.' },
+  { id:'M2', type:'M', name:'Conference Room 7', px:[1135,715,1325,835], front:'n', size:'5.20 × 3.40 ม.' },
+  { id:'L1', type:'L', name:'Conference Room 8', px:[1325,625,1465,835], front:'w', size:'4.00 × 6.00 ม.' },
+];
+const roomById = id => ROOMS.find(r => r.id === id);
+const WD = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+const WDS = ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+
+/* ---------- utils ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseYmd = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
+const atHour = (date,h) => { const d = parseYmd(date); d.setHours(h,0,0,0); return d; };
+const hm = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const fmtRange = (s,e) => `${pad(s)}:00–${pad(e-1)}:59 น.`;
+const thDate = (date, opt={}) => parseYmd(date).toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short',year:'numeric',...opt});
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function dur(ms){ const m = Math.max(0,Math.round(ms/60000)); const h = Math.floor(m/60), mm = m%60; return h ? `${h} ชม. ${mm} นาที` : `${mm} นาที`; }
+
+/* ---------- storage ---------- */
+const KEY = 'budhlib.booking.v1';
+let db = load();
+function load(){
+  try { const r = JSON.parse(localStorage.getItem(KEY)); if (r && r.v === 1) return r; } catch {}
+  return seed();
+}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(db)); } catch {} }
+function seed(){
+  const t = new Date(); const day = k => { const d = new Date(t); d.setDate(d.getDate()+k); return ymd(d); };
+  const d = { v:1, seq:1, bookings:[], doorLog:[],
+    settings:{ maxHoursPerDay:1, openBeforeMin:10, openHour:0, closeHour:24, closedWeekdays:[], closedDates:[], clockOffset:0 } };
+  // วันปิดตัวอย่าง: 1 วันในอีก ~10 วันข้างหน้า
+  d.settings.closedDates.push({ date: day(10), note:'ปิดปรับปรุงระบบไฟฟ้า (ตัวอย่าง)' });
+  const add = (roomId,date,start,end,userId) => d.bookings.push({ id:'BK'+pad(d.seq++).padStart(4,'0'), roomId, date, start, end, userId,
+    status:'active', createdAt:new Date().toISOString(), createdBy:userId, transfers:[], opens:[] });
+  const h = t.getHours();
+  const hh = k => Math.min(23, Math.max(0, h + k));
+  add('S2', day(0), hh(0), hh(0)+1, 'doctor01');
+  add('M1', day(0), hh(0), hh(0)+1, 'nurse01');
+  add('S4', day(0), hh(1), hh(1)+1, 'student02');
+  add('L1', day(0), hh(1), hh(1)+1, 'doctor01');
+  add('S1', day(0), hh(2), hh(2)+1, 'nurse01');
+  add('M2', day(1), 10, 11, 'doctor01');
+  add('S3', day(1), 13, 14, 'student02');
+  add('S3', day(2), 14, 15, 'user');           // การจองที่ยังไม่ถึง
+  add('S5', day(-1), 9, 10, 'user');           // การจองที่ผ่านไปแล้ว
+  add('M1', day(-3), 15, 16, 'user');
+  d.bookings.find(b => b.roomId==='S5' && b.userId==='user').opens.push(new Date(atHour(day(-1),9).getTime()-5*60000).toISOString());
+  localStorage.setItem(KEY, JSON.stringify(d));
+  return d;
+}
+const S = () => db.settings;
+const now = () => new Date(Date.now() + (S().clockOffset||0));
+
+/* =========================================================
+   กติกาการจอง
+   ========================================================= */
+function closedReason(date){
+  const s = S(); const wd = parseYmd(date).getDay();
+  if (s.closedWeekdays.includes(wd)) return `ห้องสมุดปิดทุกวัน${WD[wd]}`;
+  const c = s.closedDates.find(x => x.date === date);
+  return c ? (c.note ? `ห้องสมุดปิด: ${c.note}` : 'ห้องสมุดปิดวันนี้') : null;
+}
+const active = () => db.bookings.filter(b => b.status === 'active');
+const overlap = (b,date,s,e) => b.date === date && b.start < e && s < b.end;
+const busyBy = (roomId,date,s,e,ignore) => active().find(b => b.roomId === roomId && b.id !== ignore && overlap(b,date,s,e));
+const usedHours = (uid,date,ignore) => active().filter(b => b.userId === uid && b.date === date && b.id !== ignore).reduce((a,b) => a + b.end - b.start, 0);
+
+function slotError(date,s,e){
+  if (!date) return 'กรุณาเลือกวันที่';
+  const cr = closedReason(date); if (cr) return cr;
+  if (s < S().openHour || e > S().closeHour) return `เปิดให้จองเฉพาะ ${pad(S().openHour)}:00–${pad(S().closeHour)}:00 น.`;
+  if (atHour(date,e) <= now()) return 'ช่วงเวลานี้ผ่านไปแล้ว';
+  return null;
+}
+function bookError(uid,roomId,date,s,e,ignore){
+  const se = slotError(date,s,e); if (se) return se;
+  if (busyBy(roomId,date,s,e,ignore)) return 'ห้องนี้ถูกจองในช่วงเวลานี้แล้ว';
+  const mine = active().find(b => b.userId === uid && b.id !== ignore && overlap(b,date,s,e));
+  if (mine) return `${userById(uid)?.name || uid} มีการจอง ${roomById(mine.roomId).name} ในช่วงเวลาเดียวกันแล้ว`;
+  const used = usedHours(uid,date,ignore), max = S().maxHoursPerDay;
+  if (used + (e-s) > max) return `เกินสิทธิ์การจอง: สูงสุด ${max} ชม./วัน (${userById(uid)?.name || uid} ใช้ไปแล้ว ${used} ชม.)`;
+  return null;
+}
+// ช่วงเวลากดเปิดประตู: ล่วงหน้าได้ openBeforeMin นาที เฉพาะกรณีห้องว่างก่อนหน้า
+function doorWindow(b){
+  const st = atHour(b.date,b.start), en = atHour(b.date,b.end);
+  let from = new Date(st.getTime() - S().openBeforeMin*60000);
+  const prev = active().find(x => x.roomId === b.roomId && x.id !== b.id && x.date === b.date && x.end === b.start);
+  if (prev) from = st;
+  return { st, en, from, early: !prev };
+}
+function bookingPhase(b){
+  if (b.status === 'cancelled') return 'cancelled';
+  const n = now(), w = doorWindow(b);
+  if (n >= w.en) return 'done';
+  if (n >= w.st) return 'inuse';
+  if (n >= w.from) return 'openable';
+  return 'upcoming';
+}
+
+/* =========================================================
+   สถานะ UI
+   ========================================================= */
+const state = { user:null, date:'', start:0, hours:1, type:'all', sel:null, mineTab:'up', calMonth:null, adminDate:'' };
+
+function defaultSlot(){
+  const n = now(); let d = ymd(n); let h = n.getHours();
+  if (h < S().openHour) h = S().openHour;
+  if (h >= S().closeHour) { const t = new Date(n); t.setDate(t.getDate()+1); d = ymd(t); h = S().openHour; }
+  state.date = d; state.start = h; state.hours = 1;
+}
+function hourOptions(sel, date, cur){
+  const n = now(); const today = date === ymd(n);
+  let html = '';
+  for (let h = S().openHour; h < S().closeHour; h++){
+    const past = today && h < n.getHours();
+    html += `<option value="${h}" ${h===cur?'selected':''} ${past?'disabled':''}>${pad(h)}:00 น.</option>`;
+  }
+  sel.innerHTML = html;
+}
+function durOptions(sel, start, cur){
+  const max = Math.max(1, Math.min(S().maxHoursPerDay, S().closeHour - start));
+  let html = '';
+  for (let k = 1; k <= max; k++) html += `<option value="${k}" ${k===cur?'selected':''}>${k} ชั่วโมง (ถึง ${pad(start+k-1)}:59)</option>`;
+  sel.innerHTML = html;
+  if (cur > max) state.hours = max;
+}
+function clampSlot(){
+  const n = now();
+  if (state.date === ymd(n) && state.start < n.getHours()) state.start = Math.max(n.getHours(), S().openHour);
+  state.start = Math.min(Math.max(state.start, S().openHour), S().closeHour - 1);
+  state.hours = Math.max(1, Math.min(state.hours, S().maxHoursPerDay, S().closeHour - state.start));
+}
+function availability(){
+  const map = {};
+  for (const r of ROOMS){
+    const b = busyBy(r.id, state.date, state.start, state.start + state.hours);
+    map[r.id] = !b ? 'ok' : (b.userId === state.user.id ? 'mine' : 'busy');
+  }
+  return map;
+}
+
+/* ---------- toast / modal ---------- */
+function toast(msg, err){
+  const el = document.createElement('div'); el.textContent = msg; if (err) el.className = 'err';
+  $('#toast').appendChild(el); setTimeout(() => el.remove(), 3200);
+}
+function modal(html, bind){
+  const root = $('#modalRoot');
+  root.innerHTML = `<div class="modal"><div class="box">${html}</div></div>`;
+  const close = () => root.innerHTML = '';
+  root.querySelector('.modal').addEventListener('click', e => { if (e.target.classList.contains('modal')) close(); });
+  root.querySelectorAll('[data-close]').forEach(b => b.onclick = close);
+  bind && bind(root.querySelector('.box'), close);
+}
+
+/* =========================================================
+   Auth + routing
+   ========================================================= */
+const NAV = [
+  { k:'search', t:'ค้นหาห้อง', i:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
+  { k:'map',    t:'ผัง 3D',    i:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>' },
+  { k:'mine',   t:'การจองของฉัน', i:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>' },
+  { k:'admin',  t:'ผู้ดูแล', i:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.6H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 4.6V4.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.1.7Z"/>', admin:true },
+];
+function renderNav(cur){
+  const items = NAV.filter(n => !n.admin || state.user.role === 'admin');
+  $('#topnav').innerHTML = items.map(n => `<a href="#${n.k}" class="${n.k===cur?'on':''}">${n.t}</a>`).join('');
+  $('#botnav').innerHTML = items.map(n => `<a href="#${n.k}" class="${n.k===cur?'on':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${n.i}</svg>${n.t}</a>`).join('');
+}
+function login(uid){
+  state.user = userById(uid);
+  try { sessionStorage.setItem('budhlib.session', uid); } catch {}
+  $('#view-login').classList.add('hidden'); $('#shell').classList.remove('hidden');
+  $('#uAv').textContent = state.user.name.replace(/^(พญ\.|นศพ\.|นพ\.)/,'').trim().charAt(0);
+  $('#uName').textContent = `${state.user.name} (${state.user.id})`;
+  defaultSlot();
+  if (!location.hash || location.hash === '#login') location.hash = '#search'; else route();
+}
+function logout(){
+  try { sessionStorage.removeItem('budhlib.session'); } catch {}
+  state.user = null; $('#shell').classList.add('hidden'); $('#view-login').classList.remove('hidden');
+  location.hash = '#login'; three.running = false;
+}
+$('#loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = $('#lgUser').value.trim().toLowerCase(), pw = $('#lgPw').value;
+  const u = USERS.find(x => x.id === id && x.pw === pw);
+  if (!u){ $('#lgErr').textContent = 'รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'; $('#lgErr').classList.remove('hidden'); return; }
+  $('#lgErr').classList.add('hidden'); $('#lgPw').value = '';
+  login(u.id);
+});
+$('#logoutBtn').onclick = logout;
+
+function route(){
+  if (!state.user) return;
+  let v = location.hash.slice(1) || 'search';
+  if (!['search','map','mine','admin'].includes(v) || (v === 'admin' && state.user.role !== 'admin')) v = 'search';
+  ['search','map','mine','admin'].forEach(k => $('#view-'+k).classList.toggle('hidden', k !== v));
+  renderNav(v);
+  three.running = v === 'map';
+  if (v === 'search') renderSearch();
+  if (v === 'map') { renderMap(); initThree(); three.running = true; three.resize(); }
+  if (v === 'mine') renderMine();
+  if (v === 'admin') renderAdmin();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', route);
+
+function tickClock(){
+  const n = now(); const el = $('#clock');
+  el.textContent = (S().clockOffset ? '⏱ จำลอง ' : '') + n.toLocaleDateString('th-TH',{day:'numeric',month:'short'}) + ' ' + hm(n);
+  el.classList.toggle('fake', !!S().clockOffset);
+}
+setInterval(() => {
+  if (!state.user) return;
+  tickClock();
+  if (!$('#view-mine').classList.contains('hidden') && !$('#modalRoot').innerHTML) renderMine();
+}, 15000);
+
+/* =========================================================
+   หน้า ค้นหา
+   ========================================================= */
+let searched = false;
+function renderSearch(){
+  tickClock(); clampSlot();
+  const n = now();
+  $('#sDate').min = ymd(n);
+  $('#sDate').value = state.date;
+  hourOptions($('#sStart'), state.date, state.start);
+  durOptions($('#sHours'), state.start, state.hours);
+  const used = usedHours(state.user.id, state.date);
+  $('#sNote').innerHTML = `สิทธิ์ของคุณ: จองได้สูงสุด <b>${S().maxHoursPerDay} ชม./วัน</b> · วันที่เลือกใช้ไปแล้ว ${used} ชม. · กดเปิดประตูได้ก่อนเวลา ${S().openBeforeMin} นาที`;
+  if (searched) renderResults(); else $('#results').innerHTML = '';
+}
+$('#sDate').addEventListener('change', e => { state.date = e.target.value; renderSearch(); });
+$('#sStart').addEventListener('change', e => { state.start = +e.target.value; renderSearch(); });
+$('#sHours').addEventListener('change', e => { state.hours = +e.target.value; renderSearch(); });
+$('#searchForm').addEventListener('submit', e => { e.preventDefault(); searched = true; renderResults(); $('#results').scrollIntoView({behavior:'smooth', block:'start'}); });
+
+function renderResults(){
+  const err = slotError(state.date, state.start, state.start + state.hours);
+  const head = `<div class="muted" style="font-size:14px">${thDate(state.date,{weekday:'long'})} · ${fmtRange(state.start, state.start+state.hours)}</div>`;
+  if (err){ $('#results').innerHTML = `<div class="result-head">${head}</div><div class="notice err">${esc(err)}</div>`; return; }
+  const av = availability();
+  const free = ROOMS.filter(r => av[r.id] === 'ok').length;
+  const used = usedHours(state.user.id, state.date), left = S().maxHoursPerDay - used;
+  const quota = left < state.hours ? `<div class="notice warn" style="margin-bottom:14px">วันนี้คุณใช้สิทธิ์ไปแล้ว ${used} ชม. จากสูงสุด ${S().maxHoursPerDay} ชม./วัน — ดูห้องได้แต่จองเพิ่มไม่ได้</div>` : '';
+  const cards = ['L','M','S'].map(t => {
+    const rs = ROOMS.filter(r => r.type === t), f = rs.filter(r => av[r.id] === 'ok').length;
+    return `<button class="tcard ${f?'':'zero'}" data-type="${t}">
+      <div class="row" style="width:100%;justify-content:space-between"><div class="ico"><b>${TYPES[t].icon}</b></div><div class="cnt">${f}<small> / ${rs.length} ห้องว่าง</small></div></div>
+      <div><div class="ttl">${TYPES[t].label}</div><div class="meta">${TYPES[t].cap} · ${TYPES[t].equip}</div></div>
+      <div class="roomdots">${rs.map(r => `<i class="${av[r.id]==='ok'?'ok':'busy'}">${r.id}</i>`).join('')}</div>
+      <div class="go">ดูในผัง 3D และจอง ›</div></button>`;
+  }).join('');
+  $('#results').innerHTML = `<div class="result-head"><div><div class="bignum">${free}</div><div class="muted">ห้องว่าง</div></div>
+    <div style="flex:1">${head}<div style="font-weight:600">พบห้องว่าง ${free} จาก ${ROOMS.length} ห้อง</div></div>
+    <a class="btn" href="#map">เปิดผัง 3D ทั้งหมด ›</a></div>${quota}<div class="types">${cards}</div>`;
+  $$('#results .tcard').forEach(c => c.onclick = () => { state.type = c.dataset.type; state.sel = null; location.hash = '#map'; });
+}
+
+/* =========================================================
+   หน้า ผัง 3D (panel)
+   ========================================================= */
+function renderMap(){
+  clampSlot();
+  $('#mDate').min = ymd(now()); $('#mDate').value = state.date;
+  hourOptions($('#mStart'), state.date, state.start);
+  durOptions($('#mHours'), state.start, state.hours);
+  const err = slotError(state.date, state.start, state.start + state.hours);
+  $('#mClosed').innerHTML = err ? `<span class="pill busy">${esc(err)}</span>` : `<span class="pill gray">${fmtRange(state.start,state.start+state.hours)}</span>`;
+  const av = err ? Object.fromEntries(ROOMS.map(r => [r.id,'busy'])) : availability();
+
+  const cnt = t => ROOMS.filter(r => (t==='all'||r.type===t) && av[r.id]==='ok').length;
+  $('#typeChips').innerHTML = [['all','ทั้งหมด'],['L','ห้องใหญ่'],['M','ห้องกลาง'],['S','ห้องเล็ก']]
+    .map(([k,l]) => `<button class="chip ${state.type===k?'on':''}" data-t="${k}">${l} <b>${cnt(k)}</b></button>`).join('');
+  $$('#typeChips .chip').forEach(c => c.onclick = () => { state.type = c.dataset.t; if (state.sel && state.type !== 'all' && roomById(state.sel).type !== state.type) state.sel = null; renderMap(); if (!state.sel) three.focusType?.(state.type); });
+
+  const list = ROOMS.filter(r => state.type === 'all' || r.type === state.type);
+  const pill = s => s==='ok' ? '<span class="pill ok"><span class="dot"></span>ว่าง</span>' : s==='mine' ? '<span class="pill mine">ของฉัน</span>' : '<span class="pill busy">ไม่ว่าง</span>';
+  $('#roomList').innerHTML = list.map(r => `<button class="ritem ${state.sel===r.id?'sel':''}" data-id="${r.id}">
+      <div class="code ${av[r.id]}">${r.id}</div><div><div class="nm">${r.name}</div><div class="ds">${TYPES[r.type].label} · ${TYPES[r.type].cap}</div></div>${pill(av[r.id])}</button>`).join('');
+  $$('#roomList .ritem').forEach(b => b.onclick = () => selectRoom(b.dataset.id, true));
+
+  // detail
+  const det = $('#roomDetail'), btn = $('#bookBtn');
+  if (!state.sel){
+    det.innerHTML = `<p class="muted" style="margin:0">คลิกห้องในผัง 3D หรือในรายการด้านบนเพื่อดูรายละเอียด</p>`;
+    btn.disabled = true; btn.textContent = 'เลือกห้องที่ว่างเพื่อจอง';
+  } else {
+    const r = roomById(state.sel), st = av[r.id];
+    const b = busyBy(r.id, state.date, state.start, state.start+state.hours);
+    det.innerHTML = `<div class="row" style="justify-content:space-between"><h3>${r.name}</h3>${pill(st)}</div>
+      <dl class="kv"><dt>ประเภท</dt><dd>${TYPES[r.type].label} (${r.id})</dd><dt>ความจุ</dt><dd>${TYPES[r.type].cap}</dd>
+      <dt>ขนาด</dt><dd>${r.size}</dd><dt>อุปกรณ์</dt><dd>${TYPES[r.type].equip}</dd>
+      ${b ? `<dt>จองโดย</dt><dd>${b.userId===state.user.id?'คุณ':'ผู้ใช้อื่น'} · ${fmtRange(b.start,b.end)}</dd>` : ''}</dl>
+      <b style="font-size:13px">ตารางห้องวันที่ ${thDate(state.date)}</b>${timeline(r.id)}`;
+    const e = st === 'ok' ? bookError(state.user.id, r.id, state.date, state.start, state.start+state.hours) : (err || 'ห้องไม่ว่างในช่วงเวลานี้');
+    btn.disabled = !!e;
+    btn.textContent = e ? e : `จอง ${r.name} · ${fmtRange(state.start, state.start+state.hours)}`;
+  }
+  three.update?.(av);
+}
+function timeline(roomId){
+  const o = S().openHour, c = S().closeHour, n = now();
+  let cells = '', ticks = '';
+  for (let h = o; h < c; h++){
+    const b = busyBy(roomId, state.date, h, h+1);
+    const q = h >= state.start && h < state.start + state.hours;
+    const past = atHour(state.date, h+1) <= n;
+    cells += `<i class="${b ? (b.userId===state.user.id?'m':'b') : q ? 'q' : past ? 'x' : ''}" title="${pad(h)}:00"></i>`;
+    ticks += `<span>${(h-o) % (c-o > 12 ? 3 : 2) === 0 ? pad(h) : ''}</span>`;
+  }
+  return `<div class="tl"><div class="cells">${cells}</div><div class="ticks">${ticks}</div></div>
+    <div class="muted" style="font-size:11px">■ น้ำเงิน = ช่วงที่เลือก · แดง = ไม่ว่าง · ส้ม = ของฉัน · เทา = ผ่านไปแล้ว</div>`;
+}
+function selectRoom(id, fly){
+  state.sel = id;
+  if (state.type !== 'all' && roomById(id).type !== state.type) state.type = 'all';
+  renderMap();
+  if (fly) three.focusRoom?.(id);
+  three.select?.(id);
+  if (matchMedia('(max-width:900px)').matches) $('#roomDetail').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+$('#mDate').addEventListener('change', e => { state.date = e.target.value; renderMap(); });
+$('#mStart').addEventListener('change', e => { state.start = +e.target.value; renderMap(); });
+$('#mHours').addEventListener('change', e => { state.hours = +e.target.value; renderMap(); });
+$('#bookBtn').addEventListener('click', () => {
+  const r = roomById(state.sel), s = state.start, e = s + state.hours;
+  modal(`<h3>ยืนยันการจอง</h3><p class="muted" style="margin:0 0 12px">ตรวจสอบรายละเอียดก่อนกดยืนยัน</p>
+    <dl class="detail kv" style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0">
+      <dt class="muted">ห้อง</dt><dd style="margin:0"><b>${r.name}</b> (${TYPES[r.type].label})</dd>
+      <dt class="muted">วันที่</dt><dd style="margin:0">${thDate(state.date,{weekday:'long'})}</dd>
+      <dt class="muted">เวลา</dt><dd style="margin:0">${fmtRange(s,e)}</dd>
+      <dt class="muted">ผู้จอง</dt><dd style="margin:0">${esc(state.user.name)} (${state.user.id})</dd>
+      <dt class="muted">เปิดประตู</dt><dd style="margin:0">ได้ตั้งแต่ ${hm(new Date(atHour(state.date,s) - S().openBeforeMin*60000))} น. (ถ้าห้องว่างก่อนหน้า)</dd></dl>
+    <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn" id="cfm">ยืนยันการจอง</button></div>`,
+  (box, close) => box.querySelector('#cfm').onclick = () => {
+    const err = bookError(state.user.id, r.id, state.date, s, e);
+    if (err){ toast(err, true); close(); renderMap(); return; }
+    const b = { id:'BK'+String(db.seq++).padStart(4,'0'), roomId:r.id, date:state.date, start:s, end:e, userId:state.user.id,
+      status:'active', createdAt:new Date().toISOString(), createdBy:state.user.id, transfers:[], opens:[] };
+    db.bookings.push(b); save(); close();
+    modal(`<div style="text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 10px;font-size:32px">✓</div>
+      <h3>จองสำเร็จ</h3><p class="muted">${r.name} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)}<br>รหัสการจอง <b>${b.id}</b></p></div>
+      <div class="acts" style="justify-content:center"><button class="btn ghost" data-close>จองต่อ</button><a class="btn" href="#mine" data-close>ดูการจองของฉัน</a></div>`);
+    renderMap();
+  });
+});
+
+/* =========================================================
+   หน้า การจองของฉัน
+   ========================================================= */
+$$('.seg button').forEach(b => b.onclick = () => { state.mineTab = b.dataset.t; renderMine(); });
+function renderMine(){
+  tickClock();
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.t === state.mineTab));
+  const me = state.user.id, n = now();
+  const mine = db.bookings.filter(b => b.userId === me);
+  const gaveAway = db.bookings.filter(b => b.userId !== me && b.transfers.some(t => t.from === me));
+  const up = mine.filter(b => b.status === 'active' && bookingPhase(b) !== 'done').sort((a,b) => atHour(a.date,a.start) - atHour(b.date,b.start));
+  const past = [...mine.filter(b => !up.includes(b)), ...gaveAway].sort((a,b) => atHour(b.date,b.start) - atHour(a.date,a.start));
+  $('#mineSub').textContent = `${state.user.name} · ${state.user.dept} — ยังไม่ถึง ${up.length} รายการ · ผ่านไปแล้ว ${past.length} รายการ`;
+  const list = state.mineTab === 'up' ? up : past;
+  if (!list.length){
+    $('#mineList').innerHTML = `<div class="card empty">${state.mineTab==='up' ? 'ยังไม่มีการจองที่กำลังจะถึง<br><br><a class="btn" href="#search">ค้นหาห้องว่าง</a>' : 'ยังไม่มีประวัติการจอง'}</div>`;
+    return;
+  }
+  $('#mineList').innerHTML = list.map(b => {
+    const r = roomById(b.roomId), d = parseYmd(b.date), ph = bookingPhase(b), w = doorWindow(b);
+    const out = b.userId !== me;
+    const fromT = b.transfers.filter(t => t.to === me).pop();
+    let badge = '', info = '', acts = '';
+    if (out){ const t = b.transfers.filter(t => t.from === me).pop(); badge = `<span class="pill gray">ส่งต่อให้ ${esc(userById(t.to)?.name||t.to)} แล้ว</span>`; }
+    else if (ph === 'cancelled') badge = '<span class="pill busy">ยกเลิกแล้ว</span>';
+    else if (ph === 'done') badge = `<span class="pill gray">เสร็จสิ้น</span>${b.opens.length ? ' <span class="pill ok">เข้าใช้ห้องแล้ว</span>' : ' <span class="pill gray">ไม่ได้เปิดประตู</span>'}`;
+    else if (ph === 'inuse'){ badge = '<span class="pill ok"><span class="dot"></span>ถึงเวลาใช้ห้อง</span>'; info = `เหลือเวลาอีก ${dur(w.en - n)}`; }
+    else if (ph === 'openable'){ badge = '<span class="pill blue">กดเปิดประตูได้แล้ว</span>'; info = `เริ่มในอีก ${dur(w.st - n)}`; }
+    else { badge = '<span class="pill mine">รอใช้งาน</span>'; info = `เปิดประตูได้ตั้งแต่ ${hm(w.from)} น. (อีก ${dur(w.from - n)})${w.early ? '' : ' · ห้องมีผู้ใช้ก่อนหน้า จึงเปิดได้ตรงเวลา'}`; }
+    if (!out && (ph === 'openable' || ph === 'inuse')) acts += `<button class="btn door" data-open="${b.id}">🔓 เปิดประตูห้อง</button>`;
+    if (!out && ph === 'upcoming' || !out && ph === 'openable') acts += `<button class="btn soft sm" data-xfer="${b.id}">↪ ส่งต่อการจอง</button><button class="btn warn sm" data-cancel="${b.id}">ยกเลิก</button>`;
+    return `<div class="card bk ${state.mineTab==='past'?'past':''}">
+      <div class="datebox"><small>${d.toLocaleDateString('th-TH',{weekday:'short'})}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString('th-TH',{month:'short'})}</small></div>
+      <div><div class="row" style="gap:8px"><span class="ttl">${r.name}</span>${badge}</div>
+        <div class="meta">${TYPES[r.type].label} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)} · รหัส ${b.id}</div>
+        ${fromT ? `<div class="meta">รับต่อจาก ${esc(userById(fromT.from)?.name||fromT.from)}</div>` : ''}
+        ${info ? `<div class="doorinfo">${info}</div>` : ''}
+        ${b.opens.length && !out ? `<div class="meta" style="font-size:12px">เปิดประตูล่าสุด ${new Date(b.opens.at(-1)).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} น.</div>` : ''}</div>
+      <div class="acts">${acts}</div></div>`;
+  }).join('');
+  $$('[data-open]').forEach(x => x.onclick = () => openDoor(x.dataset.open));
+  $$('[data-cancel]').forEach(x => x.onclick = () => cancelBooking(x.dataset.cancel));
+  $$('[data-xfer]').forEach(x => x.onclick = () => transferBooking(x.dataset.xfer));
+}
+function openDoor(id){
+  const b = db.bookings.find(x => x.id === id), ph = bookingPhase(b);
+  if (!(ph === 'openable' || ph === 'inuse')) { toast('ยังไม่ถึงเวลาเปิดประตู', true); renderMine(); return; }
+  const at = now().toISOString();
+  b.opens.push(at); db.doorLog.unshift({ at, bookingId:b.id, roomId:b.roomId, userId:state.user.id }); save();
+  // ระบบจริง: เรียก API ของตัวควบคุมประตู (access control) ที่นี่
+  const r = roomById(b.roomId);
+  modal(`<div style="text-align:center"><div class="doorani"><div class="frame"><div class="leaf"></div></div><div class="light"></div></div>
+    <h3>ปลดล็อกประตูแล้ว</h3><p class="muted" style="margin:0">${r.name} · ประตูจะล็อกอัตโนมัติใน 10 วินาที<br>ใช้ห้องได้ถึง ${pad(b.end-1)}:59 น.</p></div>
+    <div class="acts" style="justify-content:center"><button class="btn" data-close>ตกลง</button></div>`);
+  renderMine();
+}
+function cancelBooking(id){
+  const b = db.bookings.find(x => x.id === id), r = roomById(b.roomId);
+  modal(`<h3>ยกเลิกการจอง?</h3><p class="muted">${r.name} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)}<br>ห้องจะกลับมาว่างให้ผู้อื่นจองได้ทันที</p>
+    <div class="acts"><button class="btn ghost" data-close>ไม่ใช่</button><button class="btn warn" id="ok">ยืนยันยกเลิก</button></div>`,
+  (box, close) => box.querySelector('#ok').onclick = () => {
+    if (bookingPhase(b) === 'inuse' || bookingPhase(b) === 'done'){ toast('เลยเวลาเริ่มแล้ว ยกเลิกไม่ได้', true); close(); return; }
+    b.status = 'cancelled'; b.cancelledAt = new Date().toISOString(); b.cancelledBy = state.user.id; save(); close(); toast('ยกเลิกการจองแล้ว'); renderMine();
+  });
+}
+function transferBooking(id){
+  const b = db.bookings.find(x => x.id === id), r = roomById(b.roomId);
+  const others = USERS.filter(u => u.id !== state.user.id && u.role === 'user');
+  modal(`<h3>ส่งต่อการจอง</h3><p class="muted" style="margin:0 0 12px">${r.name} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)}</p>
+    <label class="f">รหัสผู้ใช้ผู้รับ<input type="text" id="xUser" list="xList" placeholder="เช่น doctor01" autocapitalize="none"></label>
+    <datalist id="xList">${others.map(u => `<option value="${u.id}">${esc(u.name)}</option>`).join('')}</datalist>
+    <div id="xInfo" class="muted" style="font-size:13px;margin-top:6px">ผู้รับต้องมีสิทธิ์ชั่วโมงเหลือในวันนั้น และไม่มีการจองชนเวลา</div>
+    <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn" id="ok">ส่งต่อ</button></div>`,
+  (box, close) => {
+    const inp = box.querySelector('#xUser'), info = box.querySelector('#xInfo');
+    inp.oninput = () => { const u = userById(inp.value.trim().toLowerCase()); info.textContent = u ? `${u.name} · ${u.dept}` : 'ผู้รับต้องมีสิทธิ์ชั่วโมงเหลือในวันนั้น และไม่มีการจองชนเวลา'; };
+    box.querySelector('#ok').onclick = () => {
+      const to = inp.value.trim().toLowerCase(), u = userById(to);
+      if (!u || u.role !== 'user'){ info.innerHTML = '<span style="color:var(--busy)">ไม่พบรหัสผู้ใช้นี้</span>'; return; }
+      if (to === state.user.id){ info.innerHTML = '<span style="color:var(--busy)">ส่งต่อให้ตัวเองไม่ได้</span>'; return; }
+      const err = bookError(to, b.roomId, b.date, b.start, b.end, b.id);
+      if (err){ info.innerHTML = `<span style="color:var(--busy)">${esc(err)}</span>`; return; }
+      b.transfers.push({ from:state.user.id, to, at:new Date().toISOString() }); b.userId = to; save(); close();
+      toast(`ส่งต่อการจองให้ ${u.name} แล้ว`); renderMine();
+    };
+  });
+}
+
+/* =========================================================
+   หน้า ผู้ดูแล
+   ========================================================= */
+function renderAdmin(){
+  tickClock();
+  const s = S();
+  $('#aMax').value = s.maxHoursPerDay; $('#aBefore').value = s.openBeforeMin;
+  const ho = (sel, from, to, cur) => { let h = ''; for (let i = from; i <= to; i++) h += `<option value="${i}" ${i===cur?'selected':''}>${pad(i)}:00</option>`; sel.innerHTML = h; };
+  ho($('#aOpen'), 0, 23, s.openHour); ho($('#aClose'), 1, 24, s.closeHour);
+  $('#aRuleEx').innerHTML = `ตัวอย่าง: จอง 14:00–14:59 น. → กดเปิดประตูได้ตั้งแต่ <b>${hm(new Date(2000,0,1,14,-s.openBeforeMin))} น.</b> (ถ้าห้องว่างก่อนหน้า) · 1 ID จองได้ไม่เกิน <b>${s.maxHoursPerDay} ชม./วัน</b>`;
+  $('#aWeek').innerHTML = WD.map((w,i) => `<label><input type="checkbox" value="${i}" ${s.closedWeekdays.includes(i)?'checked':''}>${w}</label>`).join('');
+  $$('#aWeek input').forEach(c => c.onchange = () => { s.closedWeekdays = $$('#aWeek input:checked').map(x => +x.value); save(); renderAdmin(); toast('บันทึกวันปิดประจำสัปดาห์แล้ว'); });
+  renderCal();
+  const cl = [...s.closedDates].sort((a,b) => a.date.localeCompare(b.date));
+  $('#closedList').innerHTML = cl.length ? `<table class="tbl">${cl.map(c => `<tr><td>${thDate(c.date)}</td><td>${esc(c.note||'-')}</td><td style="text-align:right"><button class="btn ghost sm" data-unclose="${c.date}">ลบ</button></td></tr>`).join('')}</table>` : '<p class="muted" style="font-size:14px">ยังไม่มีวันปิดเฉพาะ</p>';
+  $$('[data-unclose]').forEach(b => b.onclick = () => { s.closedDates = s.closedDates.filter(c => c.date !== b.dataset.unclose); save(); renderAdmin(); });
+  renderAdminBookings();
+  $('#aDoorTbl').innerHTML = `<tr><th>เวลา</th><th>ห้อง</th><th>ผู้ใช้</th><th>รหัสจอง</th></tr>` + (db.doorLog.length ? db.doorLog.slice(0,100).map(l =>
+    `<tr><td>${new Date(l.at).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})}</td><td>${l.roomId}</td><td>${l.userId}</td><td>${l.bookingId}</td></tr>`).join('') : '<tr><td colspan="4" class="muted">ยังไม่มีการเปิดประตู</td></tr>');
+  const n = now(); $('#aFake').value = `${ymd(n)}T${hm(n)}`;
+}
+function renderCal(){
+  const s = S(), n = now();
+  if (!state.calMonth) state.calMonth = new Date(n.getFullYear(), n.getMonth(), 1);
+  const m = state.calMonth, first = m.getDay(), days = new Date(m.getFullYear(), m.getMonth()+1, 0).getDate();
+  $('#calTitle').textContent = m.toLocaleDateString('th-TH',{month:'long',year:'numeric'});
+  let h = WDS.map(w => `<div class="h">${w}</div>`).join('') + '<div></div>'.repeat(first);
+  for (let d = 1; d <= days; d++){
+    const ds = ymd(new Date(m.getFullYear(), m.getMonth(), d)), wd = (first + d - 1) % 7;
+    const c = s.closedDates.some(x => x.date === ds), wk = s.closedWeekdays.includes(wd);
+    h += `<button data-d="${ds}" class="${c?'closed':wk?'wk':''} ${ds===ymd(n)?'today':''}" ${ds < ymd(n) ? 'disabled' : ''} title="${c?'ปิด':wk?'ปิดประจำสัปดาห์':'เปิด'}">${d}</button>`;
+  }
+  $('#cal').innerHTML = h;
+  $$('#cal button[data-d]').forEach(b => b.onclick = () => {
+    const ds = b.dataset.d;
+    if (s.closedDates.some(x => x.date === ds)) { s.closedDates = s.closedDates.filter(x => x.date !== ds); save(); renderAdmin(); return; }
+    const cnt = active().filter(x => x.date === ds).length;
+    modal(`<h3>ปิดห้องสมุด ${thDate(ds,{weekday:'long'})}</h3>
+      <label class="f">เหตุผล / หมายเหตุ<input type="text" id="note" placeholder="เช่น วันหยุดนักขัตฤกษ์"></label>
+      ${cnt ? `<label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px"><input type="checkbox" id="cx" checked> ยกเลิกการจองที่มีอยู่ ${cnt} รายการในวันนี้</label>` : ''}
+      <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn warn" id="ok">ปิดวันนี้</button></div>`,
+    (box, close) => box.querySelector('#ok').onclick = () => {
+      s.closedDates.push({ date:ds, note:box.querySelector('#note').value.trim() });
+      if (box.querySelector('#cx')?.checked) active().filter(x => x.date === ds).forEach(x => { x.status = 'cancelled'; x.cancelledAt = new Date().toISOString(); x.cancelledBy = 'admin'; });
+      save(); close(); renderAdmin(); toast('บันทึกวันปิดแล้ว');
+    });
+  });
+}
+$('#calPrev').onclick = () => { state.calMonth = new Date(state.calMonth.getFullYear(), state.calMonth.getMonth()-1, 1); renderCal(); };
+$('#calNext').onclick = () => { state.calMonth = new Date(state.calMonth.getFullYear(), state.calMonth.getMonth()+1, 1); renderCal(); };
+function setSetting(k, v){
+  const s = S();
+  if (k === 'maxHoursPerDay') s.maxHoursPerDay = Math.max(1, Math.min(24, Math.round(v) || 1));
+  if (k === 'openBeforeMin') s.openBeforeMin = Math.max(0, Math.min(120, Math.round(v) || 0));
+  save(); renderAdmin();
+}
+$$('[data-step]').forEach(b => b.onclick = () => { setSetting(b.dataset.step, S()[b.dataset.step] + +b.dataset.d); toast('บันทึกการตั้งค่าแล้ว'); });
+$('#aMax').onchange = e => { setSetting('maxHoursPerDay', +e.target.value); toast('บันทึกการตั้งค่าแล้ว'); };
+$('#aBefore').onchange = e => { setSetting('openBeforeMin', +e.target.value); toast('บันทึกการตั้งค่าแล้ว'); };
+$('#aOpen').onchange = $('#aClose').onchange = () => {
+  const o = +$('#aOpen').value, c = +$('#aClose').value;
+  if (c <= o){ toast('เวลาปิดต้องหลังเวลาเปิด', true); renderAdmin(); return; }
+  S().openHour = o; S().closeHour = c; save(); toast('บันทึกเวลาเปิดให้จองแล้ว'); renderAdmin();
+};
+function renderAdminBookings(){
+  const f = state.adminDate; $('#aBkDate').value = f;
+  const rows = db.bookings.filter(b => !f || b.date === f).sort((a,b) => (b.date+pad(b.start)).localeCompare(a.date+pad(a.start)));
+  const stl = b => ({cancelled:'<span class="pill busy">ยกเลิก</span>', done:'<span class="pill gray">เสร็จสิ้น</span>', inuse:'<span class="pill ok">กำลังใช้</span>', openable:'<span class="pill blue">เปิดประตูได้</span>', upcoming:'<span class="pill mine">รอใช้งาน</span>'})[bookingPhase(b)];
+  $('#aBkTbl').innerHTML = `<tr><th>รหัส</th><th>วันที่</th><th>เวลา</th><th>ห้อง</th><th>ผู้จอง</th><th>สถานะ</th><th></th></tr>` + (rows.length ? rows.map(b => `<tr>
+    <td>${b.id}</td><td>${thDate(b.date)}</td><td>${fmtRange(b.start,b.end)}</td><td>${roomById(b.roomId).name}</td>
+    <td>${esc(userById(b.userId)?.name||b.userId)} <span class="muted">(${b.userId})</span>${b.transfers.length?` <span class="pill gray">ส่งต่อ ${b.transfers.length}</span>`:''}</td>
+    <td>${stl(b)}</td><td style="text-align:right">${['upcoming','openable'].includes(bookingPhase(b)) ? `<button class="btn warn sm" data-acx="${b.id}">ยกเลิก</button>` : ''}</td></tr>`).join('') : '<tr><td colspan="7" class="muted">ไม่มีข้อมูล</td></tr>');
+  $$('[data-acx]').forEach(x => x.onclick = () => { const b = db.bookings.find(y => y.id === x.dataset.acx); b.status = 'cancelled'; b.cancelledAt = new Date().toISOString(); b.cancelledBy = 'admin'; save(); renderAdminBookings(); toast(`ยกเลิก ${b.id} แล้ว`); });
+}
+$('#aBkDate').onchange = e => { state.adminDate = e.target.value; renderAdminBookings(); };
+$('#aBkAll').onclick = () => { state.adminDate = ''; renderAdminBookings(); };
+$('#aFakeSet').onclick = () => { const v = $('#aFake').value; if (!v) return; S().clockOffset = new Date(v).getTime() - Date.now(); save(); renderAdmin(); toast('ตั้งเวลาจำลองแล้ว'); };
+$('#aFakeOff').onclick = () => { S().clockOffset = 0; save(); renderAdmin(); toast('กลับไปใช้เวลาจริงแล้ว'); };
+$('#aReset').onclick = () => modal(`<h3>ล้างข้อมูลทดลอง?</h3><p class="muted">การจอง การตั้งค่า และประวัติทั้งหมดในเบราว์เซอร์นี้จะถูกรีเซ็ตเป็นค่าเริ่มต้น</p>
+  <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn warn" id="ok">ล้างข้อมูล</button></div>`,
+  (box, close) => box.querySelector('#ok').onclick = () => { localStorage.removeItem(KEY); db = seed(); close(); defaultSlot(); renderAdmin(); toast('รีเซ็ตข้อมูลแล้ว'); });
+
+/* =========================================================
+   3D — สร้างผังจากพิกัดบนแปลน (1 หน่วย = 1 เมตร)
+   ========================================================= */
+const three = { running:false };
+function initThree(){
+  if (three.ready) return;
+  three.ready = true;
+  const stage = $('#stage'), labelsEl = $('#labels');
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  stage.prepend(renderer.domElement);
+  const lr = new CSS2DRenderer({ element: labelsEl });
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 400);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.maxPolarAngle = Math.PI * 0.46; controls.minDistance = 6; controls.maxDistance = 80;
+  controls.screenSpacePanning = false;
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cdb8, 1.6));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+  sun.position.set(-14, 30, 18); sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left:-28, right:28, top:20, bottom:-20, near:1, far:80 });
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  // ---- materials ----
+  const plank = (() => { const c = document.createElement('canvas'); c.width = 256; c.height = 256; const g = c.getContext('2d');
+    g.fillStyle = '#cdb697'; g.fillRect(0,0,256,256);
+    for (let i = 0; i < 8; i++){ g.fillStyle = `hsl(33,${28+Math.random()*10}%,${64+Math.random()*8}%)`; g.fillRect(0, i*32, 256, 31); g.fillStyle='rgba(90,70,40,.18)'; g.fillRect(((i*97)%256), i*32, 2, 32); }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(10, 6); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+  const tile = (() => { const c = document.createElement('canvas'); c.width = 128; c.height = 128; const g = c.getContext('2d');
+    g.fillStyle = '#f2f2ef'; g.fillRect(0,0,128,128); g.strokeStyle = '#d8d8d2'; g.lineWidth = 2; g.strokeRect(1,1,126,126); g.strokeRect(1,1,63,63); g.strokeRect(64,64,63,63);
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(4, 2); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+  const M = {
+    floor: new THREE.MeshStandardMaterial({ map:plank, roughness:.85 }),
+    tile:  new THREE.MeshStandardMaterial({ map:tile, roughness:.6 }),
+    wall:  new THREE.MeshStandardMaterial({ color:0xf5f2ec, roughness:.9 }),
+    wallTop: new THREE.MeshStandardMaterial({ color:0x8b8b86 }),
+    wood:  new THREE.MeshStandardMaterial({ color:0xd8bd93, roughness:.7 }),
+    woodD: new THREE.MeshStandardMaterial({ color:0xb8946a, roughness:.7 }),
+    green: new THREE.MeshStandardMaterial({ color:0x3d5a3a, roughness:.7 }),
+    greenL: new THREE.MeshStandardMaterial({ color:0x557a4f, roughness:.8 }),
+    lawn:  new THREE.MeshStandardMaterial({ color:0x8cc152, roughness:1 }),
+    white: new THREE.MeshStandardMaterial({ color:0xfafafa, roughness:.5 }),
+    dark:  new THREE.MeshStandardMaterial({ color:0x2f3a2d, roughness:.6 }),
+    chair: new THREE.MeshStandardMaterial({ color:0x34443a, roughness:.6 }),
+    glass: new THREE.MeshStandardMaterial({ color:0xbfe4ee, transparent:true, opacity:.28, roughness:.1, metalness:.1, depthWrite:false }),
+    plant: new THREE.MeshStandardMaterial({ color:0x4f9a3c, roughness:1 }),
+    pink:  new THREE.MeshStandardMaterial({ color:0xe9b8be }),
+    shelf: new THREE.MeshStandardMaterial({ color:0x9c7b55 }),
+    void:  new THREE.MeshStandardMaterial({ color:0xe9ebe6, roughness:1 }),
+    red:   new THREE.MeshStandardMaterial({ color:0xd93a32 }),
+    screen: new THREE.MeshStandardMaterial({ color:0x1b1f22, roughness:.3 }),
+  };
+
+  // ---- geometry helpers (px บนแปลน → เมตร) ----
+  const SC = 1/36, CX = 792, CZ = 435;
+  const X = px => (px - CX) * SC, Z = py => (py - CZ) * SC;
+  const H = 2.6;                      // ความสูงผนังห้อง
+  const wallGroup = new THREE.Group(); scene.add(wallGroup);   // ผนังที่ย่อความสูงได้
+  function box(w, h, d, mat, x, y, z, parent = scene, shadow = true){
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(x, y + h/2, z); m.userData.y0 = y; m.castShadow = shadow; m.receiveShadow = true; parent.add(m); return m;
+  }
+  function rectPx(x1, y1, x2, y2, h, mat, y = 0, parent = scene){
+    return box((x2-x1)*SC, h, (y2-y1)*SC, mat, X((x1+x2)/2), y, Z((y1+y2)/2), parent);
+  }
+  // ผนังแนวตรง (แนวนอนหรือแนวตั้ง) จากพิกัด px
+  function wall(x1, y1, x2, y2, mat = M.wall, h = H, t = 0.12){
+    const horiz = Math.abs(y2-y1) < Math.abs(x2-x1);
+    const len = horiz ? Math.abs(x2-x1)*SC : Math.abs(y2-y1)*SC;
+    const w = horiz ? len + t : t, d = horiz ? t : len + t;
+    return box(w, h, d, mat, X((x1+x2)/2), 0, Z((y1+y2)/2), wallGroup);
+  }
+  function label(text, x, y, z, cls = 'zlabel', parent = scene){
+    const el = document.createElement('div'); el.className = cls; el.innerHTML = text;
+    const o = new CSS2DObject(el); o.position.set(x, y, z); parent.add(o); return o;
+  }
+  const zone = (n, t, pxX, pxY, y = 1.2) => label(`<b>${n}</b><span>${t}</span>`, X(pxX), y, Z(pxY));
+  function chair(x, z, rot = 0, parent = scene){
+    const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot; parent.add(g);
+    box(.46, .08, .46, M.chair, 0, .42, 0, g); box(.46, .45, .07, M.chair, 0, .5, .2, g); box(.06, .42, .06, M.dark, 0, 0, 0, g, false);
+    return g;
+  }
+  function plant(x, z, s = 1){
+    box(.45*s, .45*s, .45*s, M.white, x, 0, z);
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(.42*s, 0), M.plant); m.position.set(x, .45*s + .32*s, z); m.castShadow = true; scene.add(m);
+  }
+
+  // ---- พื้นอาคาร ----
+  const outline = [[35,20],[1345,20],[1345,165],[1550,165],[1550,470],[1470,470],[1470,850],[180,850],[180,555],[35,555]];
+  const shape = new THREE.Shape(outline.map(([x,y]) => new THREE.Vector2(X(x), -Z(y))));
+  const floorGeo = new THREE.ExtrudeGeometry(shape, { depth:.2, bevelEnabled:false }); floorGeo.rotateX(-Math.PI/2);
+  const floor = new THREE.Mesh(floorGeo, M.floor); floor.position.y = -0.2; floor.receiveShadow = true; scene.add(floor);
+  // ฐานรองใต้อาคาร
+  const base = new THREE.Mesh(new THREE.PlaneGeometry(90, 70), new THREE.ShadowMaterial({ opacity:.12 }));
+  base.rotation.x = -Math.PI/2; base.position.y = -0.21; base.receiveShadow = true; scene.add(base);
+
+  // ผนังภายนอก (ตัดต่ำแบบ cutaway เพื่อให้มองเห็นภายใน)
+  for (let i = 0; i < outline.length; i++){
+    const [x1,y1] = outline[i], [x2,y2] = outline[(i+1) % outline.length];
+    const w = wall(x1, y1, x2, y2, M.wall, 1.1, 0.25); w.userData.outer = true;
+    // แถบหน้าต่าง
+    const horiz = Math.abs(y2-y1) < Math.abs(x2-x1);
+    const len = (horiz ? Math.abs(x2-x1) : Math.abs(y2-y1)) * SC;
+    if (len > 3) box(horiz ? len*.8 : .27, .12, horiz ? .27 : len*.8, M.dark, X((x1+x2)/2), 1.1, Z((y1+y2)/2), wallGroup, false).userData.outer = true;
+  }
+
+  // ---- 1. โถงลิฟต์ ----
+  rectPx(40, 305, 360, 445, .02, M.tile, 0);
+  wall(40, 305, 360, 305); wall(360, 305, 360, 445, M.wall, H);
+  for (let i = 0; i < 3; i++) box(1.1, 2.2, .1, M.woodD, X(80 + i*90), 0, Z(310), wallGroup);
+  plant(X(60), Z(320), .8); plant(X(150), Z(320), .8);
+  zone(1, 'โถงลิฟต์', 200, 380);
+
+  // ---- 2. ทางเข้าออกหลัก (ประตูกั้น) ----
+  for (const y of [215, 285, 345, 375]){ box(.25, 1, .9, M.dark, X(462), 0, Z(y)); box(.6, .05, .08, M.white, X(470), .85, Z(y)); }
+  wall(370, 190, 490, 190); wall(370, 390, 490, 390, M.wall, H);
+  zone(2, 'ทางเข้า-ออกหลัก', 420, 300);
+
+  // ---- สำนักงาน / บันได (ซ้ายบน) ----
+  wall(40, 175, 490, 175); wall(130, 20, 130, 175); wall(270, 20, 270, 175); wall(400, 20, 400, 175);
+  rectPx(270, 20, 400, 165, .02, M.white);
+  for (let i = 0; i < 6; i++) box(3.2, .18*(i+1), .45, M.white, X(335), 0, Z(40 + i*20));
+  rectPx(60, 40, 110, 150, .75, M.white); for (let i = 0; i < 4; i++){ chair(X(55), Z(55 + i*28), Math.PI/2); chair(X(115), Z(55 + i*28), -Math.PI/2); }
+  rectPx(150, 100, 230, 120, .75, M.woodD); chair(X(190), Z(135), 0);
+  wall(40, 300, 360, 300, M.wall, 1.1);
+  for (const x1 of [40, 140, 240]) rectPx(x1+5, 455, x1+95, 550, .02, M.woodD);
+  label('สำนักงาน', X(200), 1.4, Z(100));
+
+  // ---- 3. ส่วนต้อนรับ ----
+  rectPx(580, 30, 600, 190, 1.05, M.green); rectPx(580, 170, 700, 190, 1.05, M.green);
+  rectPx(600, 40, 690, 160, .02, M.wood);
+  chair(X(625), Z(110), Math.PI); chair(X(630), Z(150), Math.PI);
+  box(1.2, 2.2, .3, M.green, X(640), 0, Z(25), wallGroup);
+  zone(3, 'ส่วนต้อนรับ', 640, 100, 1.6);
+
+  // ---- ช่องเปิดโล่ง (Void) ----
+  rectPx(745, 20, 1085, 130, .35, M.void);
+  wall(745, 130, 1085, 130, M.wall, 1.0);
+  label('ช่องเปิดโล่ง', X(915), .8, Z(75));
+
+  // ---- 4. co-working (ขั้นบันไดนั่ง) ----
+  rectPx(705, 165, 1120, 205, .45, M.wood); rectPx(705, 205, 1120, 240, .22, M.wood);
+  for (const x of [790, 860, 1000, 1070]) box(.9, .5, .9, M.green, X(x), .45, Z(185));
+  for (const x of [770, 940]) box(1.0, .4, .9, M.green, X(x), .22, Z(222));
+  zone(4, 'co working space', 900, 255);
+
+  // ---- 4. co-working ลานหญ้า ----
+  rectPx(565, 385, 1085, 625, .04, M.lawn);
+  for (const x of [612, 748]) for (const [y1,y2] of [[372,482],[518,632]]){
+    rectPx(x-12, y1, x+12, y2, .75, M.white);
+    for (let k = 0; k < 3; k++){ const yy = y1 + 18 + k*37; chair(X(x-28), Z(yy), Math.PI/2); chair(X(x+28), Z(yy), -Math.PI/2); }
+  }
+  for (const y of [430, 580]){
+    rectPx(818, y-12, 1062, y+12, .75, M.white);
+    for (let k = 0; k < 6; k++){ const xx = 840 + k*40; chair(X(xx), Z(y-32), 0); chair(X(xx), Z(y+32), Math.PI); }
+  }
+  for (const [x,y] of [[560,410],[560,600],[680,420],[680,590],[800,420],[800,590],[1075,410],[1075,600],[940,505]]) plant(X(x), Z(y), .9);
+  zone(4, 'co working space', 680, 505, 1.5); zone(4, 'co working space', 940, 505, 1.5);
+
+  // ---- 4. co-working lounge (ขวา) ----
+  rectPx(1140, 385, 1450, 600, .02, M.wood);
+  rectPx(1150, 390, 1170, 600, .9, M.woodD); rectPx(1150, 585, 1450, 605, .9, M.woodD);
+  rectPx(1335, 430, 1355, 580, .45, M.green); rectPx(1355, 445, 1440, 470, .45, M.white); rectPx(1420, 445, 1440, 585, .45, M.white);
+  rectPx(1225, 455, 1395, 520, .75, M.wood);
+  for (const [x,y] of [[1235,395],[1270,395],[1300,395],[1170,520],[1170,560],[1290,600]]) box(.8, .5, .8, M.green, X(x), 0, Z(y));
+  plant(X(1315), Z(395), .8); plant(X(1270), Z(578), .8);
+  for (const x of [1175, 1245]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.45, .45, .75, 24), M.wood); c.position.set(X(x), .375, Z(635)); c.castShadow = true; scene.add(c); }
+  zone(4, 'co working space', 1255, 490, 1.4);
+
+  // ---- 6. ส่วนเครื่องดื่มและกาแฟ ----
+  rectPx(476, 400, 500, 545, .95, M.wood); box(.35, .45, .4, M.red, X(490), .95, Z(420));
+  box(.12, 2.2, 4.4, M.wood, X(474), 0, Z(472), wallGroup);
+  zone(6, 'เครื่องดื่มและกาแฟ', 515, 470, 1.6);
+
+  // ---- 8. RELAX ZONE (โดมโค้งสีเขียว) ----
+  for (const y of [215, 270]){
+    const g = new THREE.Mesh(new THREE.CylinderGeometry(.95, .95, 2.2, 32, 1, true, 0, Math.PI), M.green);
+    g.rotation.z = Math.PI/2; g.rotation.y = 0; g.position.set(X(1297), 1.0, Z(y)); g.material.side = THREE.DoubleSide; g.castShadow = true; scene.add(g);
+    box(2.2, .25, 1.8, M.greenL, X(1297), 0, Z(y));
+  }
+  zone(8, 'RELAX ZONE', 1297, 245, 2.5);
+
+  // ---- 9. ห้องน้ำ ----
+  wall(180, 560, 470, 560); wall(330, 560, 330, 850); wall(470, 560, 470, 700);
+  rectPx(185, 565, 470, 845, .02, M.tile);
+  for (const x of [215, 265]) box(.8, 2.0, .08, M.pink, X(x), 0, Z(640), wallGroup);
+  for (const x of [360, 410]) box(.8, 2.0, .08, M.pink, X(x), 0, Z(640), wallGroup);
+  wall(185, 640, 330, 640, M.wall, H); wall(335, 640, 465, 640, M.wall, H);
+  zone(9, 'ห้องน้ำ ชาย', 255, 740); zone(9, 'ห้องน้ำ หญิง', 400, 740);
+
+  // ---- 10. ทางเข้าอุโมงค์หนังสือ / 11. ส่วนทำงาน ----
+  wall(1120, 20, 1120, 165); wall(1175, 20, 1175, 165); wall(1345, 165, 1180, 165, M.wall, 1.1);
+  for (let i = 0; i < 4; i++) box(.4, 2.0, 1.0, M.shelf, X(1130), 0, Z(35 + i*35), wallGroup);
+  rectPx(1250, 100, 1330, 125, .75, M.woodD); chair(X(1270), Z(140), Math.PI); chair(X(1300), Z(140), Math.PI);
+  for (let i = 0; i < 3; i++) box(1.8, 1.8, .4, M.shelf, X(1220 + i*45), 0, Z(30), wallGroup);
+  zone(10, 'อุโมงค์หนังสือ', 1148, 95, 2.4); zone(11, 'ส่วนทำงาน', 1260, 70, 1.6);
+  // ด้านขวา (ห้องเก็บของ / ทางหนีไฟ)
+  wall(1340, 165, 1340, 350); wall(1340, 350, 1550, 350, M.wall, H); wall(1460, 165, 1460, 470);
+  rectPx(1465, 175, 1545, 465, .02, M.void);
+
+  // เสา
+  for (const [x,y] of [[480,180],[480,560],[1120,280],[1120,370],[1340,620]]) box(.5, H, .5, M.wall, X(x), 0, Z(y), wallGroup);
+
+  // ---- ห้องประชุม (จองได้) ----
+  const rooms = {};
+  const pickables = [];
+  for (const r of ROOMS){
+    const [x1,y1,x2,y2] = r.px;
+    const cx = X((x1+x2)/2), cz = Z((y1+y2)/2), w = (x2-x1)*SC, d = (y2-y1)*SC;
+    const g = new THREE.Group(); scene.add(g);
+    const fm = new THREE.MeshStandardMaterial({ color:0x22995a, roughness:.7, emissive:0x000000 });
+    const fl = box(w - .14, .06, d - .14, fm, cx, 0, cz, g, false);
+    // ผนังกั้นห้อง (ไม้) + ผนังด้านหน้า (กระจก + ประตูโค้งเขียว)
+    if (r.front === 'n'){
+      wall(x1, y1, x1, y2, M.wood); wall(x2, y1, x2, y2, M.wood);
+      const gl = box(w*.55, H*.92, .05, M.glass, cx + w*.18, 0, Z(y1), wallGroup, false);
+      box(.9, H, .14, M.green, cx - w/2 + .55, 0, Z(y1), wallGroup);      // แผงประตูเขียว
+      box(w*.55, .12, .14, M.wood, cx + w*.18, H - .12, Z(y1), wallGroup); // คานบน
+    } else {
+      wall(x1, y1, x2, y1, M.wood);
+      box(.05, H*.92, d*.6, M.glass, X(x1), 0, cz + d*.12, wallGroup, false);
+      box(.14, H, .9, M.green, X(x1), 0, cz - d/2 + .55, wallGroup);
+      box(.14, .12, d*.6, M.wood, X(x1), H - .12, cz + d*.12, wallGroup);
+    }
+    // เฟอร์นิเจอร์
+    if (r.type === 'S'){
+      box(.6, .75, 1.5, M.white, cx, 0, cz + .2, g); box(.08, .5, 1.2, M.green, cx, .75, cz + .2, g, false);
+      chair(cx - .5, cz - .2, -Math.PI/2, g); chair(cx + .5, cz - .2, Math.PI/2, g); chair(cx - .5, cz + .6, -Math.PI/2, g); chair(cx + .5, cz + .6, Math.PI/2, g);
+      box(1.0, .6, .05, M.screen, cx, 1.2, Z(y2) - .15, g, false);
+    } else if (r.type === 'M'){
+      box(3.0, .75, 1.1, M.wood, cx, 0, cz + .1, g);
+      for (let k = 0; k < 5; k++){ const xx = cx - 1.2 + k*.6; chair(xx, cz - .75, 0, g); chair(xx, cz + .95, Math.PI, g); }
+      box(.05, .9, 1.6, M.screen, cx + w/2 - .15, 1.0, cz, g, false);
+    } else {
+      box(1.2, .75, 3.4, M.wood, cx + .2, 0, cz, g);
+      for (let k = 0; k < 6; k++){ const zz = cz - 1.4 + k*.56; chair(cx - .65, zz, -Math.PI/2, g); chair(cx + 1.05, zz, Math.PI/2, g); }
+      box(1.8, 1.0, .05, M.screen, cx + .2, 1.0, Z(y1) + .1, g, false);
+    }
+    // กล่องโปร่งใสสำหรับคลิก
+    const hit = new THREE.Mesh(new THREE.BoxGeometry(w, H, d), new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false }));
+    hit.position.set(cx, H/2, cz); hit.userData.roomId = r.id; scene.add(hit); pickables.push(hit);
+    // ป้าย
+    const lb = label(`${r.id}<span class="rx"> · ${r.name.replace(/^(Meeting|Conference) Room /,'ห้อง ')}</span><small>ว่าง</small>`, cx, H + .5, cz, 'rlabel ok');
+    lb.element.onclick = () => selectRoom(r.id, true);
+    rooms[r.id] = { r, fm, fl, lb, cx, cz, w, d };
+  }
+  // ผนังด้านหลังห้องเล็ก/กลาง (ติดโถง) และแนวทางเดิน
+  wall(475, 715, 475, 850); wall(1325, 625, 1470, 625, M.wood);
+  zone(5, 'meeting room 4–6 คน', 712, 700, 3.4);
+  zone(7, 'meeting room 10–12 คน', 1135, 700, 3.4);
+
+  // หมุด (marker) ห้องที่เลือก
+  const pin = new THREE.Group();
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(.35, .8, 24), new THREE.MeshStandardMaterial({ color:0x2563eb, emissive:0x1d4ed8, emissiveIntensity:.4 }));
+  cone.rotation.x = Math.PI; pin.add(cone);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1.15, 40), new THREE.MeshBasicMaterial({ color:0x2563eb, transparent:true, opacity:.6, side:THREE.DoubleSide }));
+  ring.rotation.x = -Math.PI/2; ring.position.y = -3.9; pin.add(ring);
+  pin.visible = false; scene.add(pin);
+
+  // ---- กล้อง ----
+  const portrait = () => stage.clientWidth < stage.clientHeight * 1.1;
+  const HOME_D = { pos:new THREE.Vector3(10, 30, 34), tgt:new THREE.Vector3(0, 0, 2) };
+  const HOME_P = { pos:new THREE.Vector3(30, 38, 8), tgt:new THREE.Vector3(3, 0, 4) };
+  const HOME = { get pos(){ return (portrait() ? HOME_P : HOME_D).pos; }, get tgt(){ return (portrait() ? HOME_P : HOME_D).tgt; } };
+  const TOP = { pos:new THREE.Vector3(0, 52, 0.01), tgt:new THREE.Vector3(0, 0, 0) };
+  camera.position.copy(HOME.pos); controls.target.copy(HOME.tgt);
+  let fly = null;
+  function flyTo(pos, tgt, ms = 800){
+    fly = { p0:camera.position.clone(), t0:controls.target.clone(), p1:pos.clone(), t1:tgt.clone(), s:performance.now(), ms };
+  }
+  three.focusRoom = id => {
+    const o = rooms[id]; const t = new THREE.Vector3(o.cx, 0, o.cz);
+    flyTo(t.clone().add(new THREE.Vector3(4, 17, 16)), t);
+  };
+  three.focusType = t => {
+    if (t === 'all') return flyTo(HOME.pos, HOME.tgt);
+    const rs = ROOMS.filter(r => r.type === t).map(r => rooms[r.id]);
+    const c = rs.reduce((a,o) => a.add(new THREE.Vector3(o.cx, 0, o.cz)), new THREE.Vector3()).divideScalar(rs.length);
+    const span = Math.max(...rs.map(o => Math.abs(o.cx - c.x))) * 2 + 6;
+    flyTo(c.clone().add(new THREE.Vector3(span*.2, span*.85 + 6, span*.75 + 6)), c);
+  };
+  $('#tReset').onclick = () => flyTo(HOME.pos, HOME.tgt);
+  $('#tTop').onclick = () => flyTo(TOP.pos, TOP.tgt);
+  let low = false;
+  $('#tWalls').onclick = () => { low = !low; $('#tWalls').classList.toggle('on', low);
+    const k = low ? .35 : 1; wallGroup.children.forEach(m => { if (!m.userData.outer){ m.scale.y = k; m.position.y = (m.userData.y0 + m.geometry.parameters.height/2) * k; } }); };
+
+  // ---- สถานะห้อง ----
+  const COL = { ok:0x22995a, busy:0xd64545, mine:0xd98a10, off:0xa3a89e, sel:0x2563eb };
+  three.update = av => {
+    for (const id in rooms){
+      const o = rooms[id];
+      const off = state.type !== 'all' && o.r.type !== state.type;
+      const st = state.sel === id ? 'sel' : off ? 'off' : av[id];
+      o.fm.color.setHex(COL[st]); o.fm.emissive.setHex(st === 'sel' ? 0x1d3b8f : 0x000000);
+      o.lb.element.className = 'rlabel ' + st;
+      o.lb.element.querySelector('small').textContent = av[id] === 'ok' ? 'ว่าง' : av[id] === 'mine' ? 'จองโดยคุณ' : 'ไม่ว่าง';
+      o.lb.element.style.opacity = off && state.sel !== id ? .55 : 1;
+    }
+    three.select(state.sel);
+  };
+  three.select = id => {
+    if (!id){ pin.visible = false; return; }
+    const o = rooms[id]; pin.visible = true; pin.position.set(o.cx, 4.6, o.cz);
+    ring.scale.setScalar(Math.max(o.w, o.d) / 2.1);
+  };
+
+  // ---- คลิกเลือกห้อง ----
+  const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+  let down = null, hover = null;
+  const pick = e => {
+    const rc = renderer.domElement.getBoundingClientRect();
+    mouse.set(((e.clientX - rc.left) / rc.width) * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
+    ray.setFromCamera(mouse, camera);
+    const hit = ray.intersectObjects(pickables)[0];
+    return hit ? hit.object.userData.roomId : null;
+  };
+  renderer.domElement.addEventListener('pointerdown', e => down = { x:e.clientX, y:e.clientY });
+  renderer.domElement.addEventListener('pointerup', e => {
+    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) return;
+    const id = pick(e); if (id) selectRoom(id, false);
+  });
+  renderer.domElement.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return;
+    const id = pick(e);
+    if (id !== hover){
+      if (hover && rooms[hover]) rooms[hover].fm.emissive.setHex(state.sel === hover ? 0x1d3b8f : 0);
+      hover = id; renderer.domElement.style.cursor = id ? 'pointer' : '';
+      if (id && id !== state.sel) rooms[id].fm.emissive.setHex(0x333333);
+    }
+  });
+
+  // ---- resize / loop ----
+  three.resize = () => {
+    const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h); lr.setSize(w, h); camera.aspect = w / h;
+    camera.fov = w < 600 ? 52 : 38; camera.updateProjectionMatrix();
+  };
+  new ResizeObserver(three.resize).observe(stage);
+  const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  (function loop(t){
+    requestAnimationFrame(loop);
+    if (!three.running) return;
+    if (fly){
+      const k = Math.min(1, (t - fly.s) / fly.ms), e = ease(k);
+      camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e);
+      if (k >= 1) fly = null;
+    }
+    if (pin.visible){ cone.position.y = Math.sin(t / 300) * .25; ring.material.opacity = .35 + Math.sin(t / 300) * .25; }
+    controls.update(); renderer.render(scene, camera); lr.render(scene, camera);
+  })(0);
+  three.resize();
+  renderMap();
+  if (state.sel) three.focusRoom(state.sel); else if (state.type !== 'all') three.focusType(state.type);
+}
+// เมื่อเข้าหน้าผังจากการคลิกประเภทห้อง ให้กล้องบินไปยังกลุ่มห้องนั้น
+window.addEventListener('hashchange', () => { if (location.hash === '#map' && three.ready && !state.sel) three.focusType(state.type); });
+
+/* ---------- start ---------- */
+let sess = null; try { sess = sessionStorage.getItem('budhlib.session'); } catch {}
+if (sess && userById(sess)) login(sess); else { $('#view-login').classList.remove('hidden'); }
+</script>
+</body>
+</html>
