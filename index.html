@@ -121,8 +121,6 @@ input:focus,select:focus{outline:2px solid var(--green-2);outline-offset:0;borde
 .legend span{display:flex;align-items:center;gap:5px}
 .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
 .stage-hint{position:absolute;top:12px;right:12px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.85);padding:5px 10px;border-radius:8px;z-index:5}
-.zlabel{font-size:11px;font-weight:600;color:#3b4a36;background:rgba(255,255,255,.82);padding:1px 7px;border-radius:6px;white-space:nowrap;transform:translateY(-4px)}
-.zlabel b{background:#2c6e8f;color:#fff;border-radius:4px;padding:0 5px;margin-right:4px}
 .rlabel{pointer-events:auto;cursor:pointer;font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;color:#fff;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.2);user-select:none}
 .rlabel small{display:block;font-weight:500;font-size:10px;opacity:.9;text-align:center}
 .rlabel.ok{background:var(--ok)} .rlabel.busy{background:var(--busy)} .rlabel.mine{background:var(--mine)}
@@ -153,7 +151,11 @@ aside.panel{background:var(--card);border-left:1px solid var(--line);overflow-y:
 .tl .cells i{flex:1;height:18px;border-radius:3px;background:var(--ok-soft)}
 .tl .cells i.b{background:#f4a9a9} .tl .cells i.m{background:#f2c879} .tl .cells i.q{background:var(--sel)} .tl .cells i.x{background:#e4e2dd}
 .tl .ticks{display:flex;font-size:10px;color:var(--muted)} .tl .ticks span{flex:1}
-.sticky-book{position:sticky;bottom:0;background:var(--card);padding:14px 18px;border-top:1px solid var(--line);margin-top:auto}
+.sticky-book{position:sticky;bottom:0;background:var(--card);padding:14px 18px;border-top:1px solid var(--line);margin-top:auto;z-index:6}
+.slothint{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%);display:flex;align-items:center;gap:6px;white-space:nowrap;
+  background:var(--sel);color:#fff;border:0;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(37,99,235,.35);animation:hintb 1.1s ease-in-out infinite}
+.slothint svg{width:18px;height:18px}
+@keyframes hintb{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-8px)}}
 
 /* ---------- my bookings ---------- */
 .seg{display:inline-flex;background:#e9e5dd;border-radius:12px;padding:4px;gap:4px;margin-bottom:16px}
@@ -260,11 +262,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
   .userchip .nm{display:none}
   .clock:not(.fake){display:none}
   .legend{font-size:11px;gap:8px;padding:6px 10px;right:12px}
-  .zlabel{font-size:10px;padding:1px 3px}
-  .zlabel span{display:none}
   .rlabel{padding:2px 6px}
   .rlabel .rx,.rlabel small{display:none}
-  .zlabel b{margin:0}
   .brand small{max-width:52vw}
   nav.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
   nav.bottom a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:11px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0}
@@ -278,8 +277,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
   .tcard{flex-direction:row;flex-wrap:wrap;align-items:center}
   #view-map{grid-template-columns:1fr;height:auto}
   #stage{height:58vh}
-  aside.panel{border-left:0;padding-bottom:70px}
-  .sticky-book{bottom:62px}
+  aside.panel{border-left:0;padding-bottom:150px}
+  /* ปุ่มจองลอยเหนือเมนูล่าง; panel เว้นที่ด้านล่างไว้ให้เลื่อนช่องเวลาขึ้นมาพ้นปุ่มได้ */
+  .sticky-book{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom));z-index:35;padding:10px 14px;box-shadow:0 -6px 16px rgba(0,0,0,.06)}
+  .slots{scroll-margin-bottom:160px}
   .bk{grid-template-columns:auto 1fr}
   .bk .acts{grid-column:1/-1;justify-content:stretch}
   .bk .acts .btn{flex:1}
@@ -388,7 +389,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
         <div class="rlist" id="roomList"></div>
       </div>
       <div class="sec detail" id="roomDetail"></div>
-      <div class="sticky-book"><button class="btn block" id="bookBtn" disabled>เลือกห้องที่ว่างเพื่อจอง</button></div>
+      <div class="sticky-book">
+        <button type="button" class="slothint hidden" id="slotHint">เลื่อนลงเพื่อเลือกเวลา<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+        <button class="btn block" id="bookBtn" disabled>เลือกห้องที่ว่างเพื่อจอง</button></div>
     </aside>
   </section>
 
@@ -832,7 +835,19 @@ function renderMap(){
     btn.textContent = e ? e : `จอง ${r.name} · ${fmtRange(sl[0], sl.at(-1)+1)}`;
   }
   three.update?.(av);
+  updateHint();
 }
+// ลูกศรเด้ง "เลื่อนลงเพื่อเลือกเวลา": แสดงเมื่อเลือกห้องแล้ว ยังไม่เลือกเวลา และช่องเวลายังอยู่ใต้ปุ่มจอง
+function updateHint(){
+  const hint = $('#slotHint'), grid = $('#roomDetail .slots');
+  const need = state.view === 'map' && state.sel && !state.slots.length && grid?.querySelector('.slot.free');
+  const below = need && grid.getBoundingClientRect().top + 28 > $('.sticky-book').getBoundingClientRect().top;
+  hint.classList.toggle('hidden', !below);
+}
+$('#slotHint').addEventListener('click', () => $('#roomDetail .slots')?.scrollIntoView({behavior:'smooth', block:'center'}));
+window.addEventListener('scroll', updateHint, { passive:true });
+window.addEventListener('resize', updateHint);
+$('aside.panel').addEventListener('scroll', updateHint, { passive:true });
 // เลือกช่องเวลา: ต่อเนื่องกัน และไม่เกินสิทธิ์ชั่วโมงที่เหลือ (ถ้าเกินจะเริ่มเลือกใหม่)
 function toggleSlot(h){
   let sl = state.slots;
@@ -849,7 +864,6 @@ function selectRoom(id, fly){
   renderMap();
   if (fly) three.focusRoom?.(id);
   three.select?.(id);
-  if (matchMedia('(max-width:900px)').matches) $('#roomDetail').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 $('#mDate').addEventListener('change', e => { if (!e.target.value) return; state.date = e.target.value; state.slots = []; renderMap(); });
 $('#mRange').addEventListener('change', e => { state.range = e.target.value; state.slots = []; renderMap(); });
@@ -1121,11 +1135,10 @@ function initThree(){
     const w = horiz ? len + t : t, d = horiz ? t : len + t;
     return box(w, h, d, mat, X((x1+x2)/2), 0, Z((y1+y2)/2), wallGroup);
   }
-  function label(text, x, y, z, cls = 'zlabel', parent = scene){
+  function label(text, x, y, z, cls, parent = scene){
     const el = document.createElement('div'); el.className = cls; el.innerHTML = text;
     const o = new CSS2DObject(el); o.position.set(x, y, z); parent.add(o); return o;
   }
-  const zone = (n, t, pxX, pxY, y = 1.2) => label(`<b>${n}</b><span>${t}</span>`, X(pxX), y, Z(pxY));
   function chair(x, z, rot = 0, parent = scene){
     const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot; parent.add(g);
     box(.46, .08, .46, M.chair, 0, .42, 0, g); box(.46, .45, .07, M.chair, 0, .5, .2, g); box(.06, .42, .06, M.dark, 0, 0, 0, g, false);
@@ -1160,12 +1173,10 @@ function initThree(){
   wall(40, 305, 360, 305); wall(360, 305, 360, 445, M.wall, H);
   for (let i = 0; i < 3; i++) box(1.1, 2.2, .1, M.woodD, X(80 + i*90), 0, Z(310), wallGroup);
   plant(X(60), Z(320), .8); plant(X(150), Z(320), .8);
-  zone(1, 'โถงลิฟต์', 200, 380);
 
   // ---- 2. ทางเข้าออกหลัก (ประตูกั้น) ----
   for (const y of [215, 285, 345, 375]){ box(.25, 1, .9, M.dark, X(462), 0, Z(y)); box(.6, .05, .08, M.white, X(470), .85, Z(y)); }
   wall(370, 190, 490, 190); wall(370, 390, 490, 390, M.wall, H);
-  zone(2, 'ทางเข้า-ออกหลัก', 420, 300);
 
   // ---- สำนักงาน / บันได (ซ้ายบน) ----
   wall(40, 175, 490, 175); wall(130, 20, 130, 175); wall(270, 20, 270, 175); wall(400, 20, 400, 175);
@@ -1175,25 +1186,21 @@ function initThree(){
   rectPx(150, 100, 230, 120, .75, M.woodD); chair(X(190), Z(135), 0);
   wall(40, 300, 360, 300, M.wall, 1.1);
   for (const x1 of [40, 140, 240]) rectPx(x1+5, 455, x1+95, 550, .02, M.woodD);
-  label('สำนักงาน', X(200), 1.4, Z(100));
 
   // ---- 3. ส่วนต้อนรับ ----
   rectPx(580, 30, 600, 190, 1.05, M.green); rectPx(580, 170, 700, 190, 1.05, M.green);
   rectPx(600, 40, 690, 160, .02, M.wood);
   chair(X(625), Z(110), Math.PI); chair(X(630), Z(150), Math.PI);
   box(1.2, 2.2, .3, M.green, X(640), 0, Z(25), wallGroup);
-  zone(3, 'ส่วนต้อนรับ', 640, 100, 1.6);
 
   // ---- ช่องเปิดโล่ง (Void) ----
   rectPx(745, 20, 1085, 130, .35, M.void);
   wall(745, 130, 1085, 130, M.wall, 1.0);
-  label('ช่องเปิดโล่ง', X(915), .8, Z(75));
 
   // ---- 4. co-working (ขั้นบันไดนั่ง) ----
   rectPx(705, 165, 1120, 205, .45, M.wood); rectPx(705, 205, 1120, 240, .22, M.wood);
   for (const x of [790, 860, 1000, 1070]) box(.9, .5, .9, M.green, X(x), .45, Z(185));
   for (const x of [770, 940]) box(1.0, .4, .9, M.green, X(x), .22, Z(222));
-  zone(4, 'co working space', 900, 255);
 
   // ---- 4. co-working ลานหญ้า ----
   rectPx(565, 385, 1085, 625, .04, M.lawn);
@@ -1206,7 +1213,6 @@ function initThree(){
     for (let k = 0; k < 6; k++){ const xx = 840 + k*40; chair(X(xx), Z(y-32), 0); chair(X(xx), Z(y+32), Math.PI); }
   }
   for (const [x,y] of [[560,410],[560,600],[680,420],[680,590],[800,420],[800,590],[1075,410],[1075,600],[940,505]]) plant(X(x), Z(y), .9);
-  zone(4, 'co working space', 680, 505, 1.5); zone(4, 'co working space', 940, 505, 1.5);
 
   // ---- 4. co-working lounge (ขวา) ----
   rectPx(1140, 385, 1450, 600, .02, M.wood);
@@ -1216,12 +1222,10 @@ function initThree(){
   for (const [x,y] of [[1235,395],[1270,395],[1300,395],[1170,520],[1170,560],[1290,600]]) box(.8, .5, .8, M.green, X(x), 0, Z(y));
   plant(X(1315), Z(395), .8); plant(X(1270), Z(578), .8);
   for (const x of [1175, 1245]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.45, .45, .75, 24), M.wood); c.position.set(X(x), .375, Z(635)); c.castShadow = true; scene.add(c); }
-  zone(4, 'co working space', 1255, 490, 1.4);
 
   // ---- 6. ส่วนเครื่องดื่มและกาแฟ ----
   rectPx(476, 400, 500, 545, .95, M.wood); box(.35, .45, .4, M.red, X(490), .95, Z(420));
   box(.12, 2.2, 4.4, M.wood, X(474), 0, Z(472), wallGroup);
-  zone(6, 'เครื่องดื่มและกาแฟ', 515, 470, 1.6);
 
   // ---- 8. RELAX ZONE (โดมโค้งสีเขียว) ----
   for (const y of [215, 270]){
@@ -1229,7 +1233,6 @@ function initThree(){
     g.rotation.z = Math.PI/2; g.rotation.y = 0; g.position.set(X(1297), 1.0, Z(y)); g.material.side = THREE.DoubleSide; g.castShadow = true; scene.add(g);
     box(2.2, .25, 1.8, M.greenL, X(1297), 0, Z(y));
   }
-  zone(8, 'RELAX ZONE', 1297, 245, 2.5);
 
   // ---- 9. ห้องน้ำ ----
   wall(180, 560, 470, 560); wall(330, 560, 330, 850); wall(470, 560, 470, 700);
@@ -1237,14 +1240,12 @@ function initThree(){
   for (const x of [215, 265]) box(.8, 2.0, .08, M.pink, X(x), 0, Z(640), wallGroup);
   for (const x of [360, 410]) box(.8, 2.0, .08, M.pink, X(x), 0, Z(640), wallGroup);
   wall(185, 640, 330, 640, M.wall, H); wall(335, 640, 465, 640, M.wall, H);
-  zone(9, 'ห้องน้ำ ชาย', 255, 740); zone(9, 'ห้องน้ำ หญิง', 400, 740);
 
   // ---- 10. ทางเข้าอุโมงค์หนังสือ / 11. ส่วนทำงาน ----
   wall(1120, 20, 1120, 165); wall(1175, 20, 1175, 165); wall(1345, 165, 1180, 165, M.wall, 1.1);
   for (let i = 0; i < 4; i++) box(.4, 2.0, 1.0, M.shelf, X(1130), 0, Z(35 + i*35), wallGroup);
   rectPx(1250, 100, 1330, 125, .75, M.woodD); chair(X(1270), Z(140), Math.PI); chair(X(1300), Z(140), Math.PI);
   for (let i = 0; i < 3; i++) box(1.8, 1.8, .4, M.shelf, X(1220 + i*45), 0, Z(30), wallGroup);
-  zone(10, 'อุโมงค์หนังสือ', 1148, 95, 2.4); zone(11, 'ส่วนทำงาน', 1260, 70, 1.6);
   // ด้านขวา (ห้องเก็บของ / ทางหนีไฟ)
   wall(1340, 165, 1340, 350); wall(1340, 350, 1550, 350, M.wall, H); wall(1460, 165, 1460, 470);
   rectPx(1465, 175, 1545, 465, .02, M.void);
@@ -1286,6 +1287,8 @@ function initThree(){
       box(1.2, .75, 3.4, M.wood, cx + .2, 0, cz, g);
       for (let k = 0; k < 6; k++){ const zz = cz - 1.4 + k*.56; chair(cx - .65, zz, -Math.PI/2, g); chair(cx + 1.05, zz, Math.PI/2, g); }
       box(1.8, 1.0, .05, M.screen, cx + .2, 1.0, Z(y1) + .1, g, false);
+      // เก้าอี้ริมผนังฝั่งตรงข้ามจอ TV 6 ตัว (หันหน้าเข้าหาจอ)
+      for (let k = 0; k < 6; k++) chair(cx - 1.4 + k*.56, Z(y2) - .4, 0, g);
     }
     // กล่องโปร่งใสสำหรับคลิก
     const hit = new THREE.Mesh(new THREE.BoxGeometry(w, H, d), new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false }));
@@ -1297,8 +1300,6 @@ function initThree(){
   }
   // ผนังด้านหลังห้องเล็ก/กลาง (ติดโถง) และแนวทางเดิน
   wall(475, 715, 475, 850); wall(1325, 625, 1470, 625, M.wood);
-  zone(5, 'meeting room 4–6 คน', 712, 700, 3.4);
-  zone(7, 'meeting room 10–12 คน', 1135, 700, 3.4);
 
   // หมุด (marker) ห้องที่เลือก
   const pin = new THREE.Group();
