@@ -211,6 +211,45 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 .doorani .light{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--ok);box-shadow:0 0 16px var(--ok)}
 @keyframes open{to{transform:rotateY(-75deg)}}
 
+/* ---------- login quick / home / new booking ---------- */
+.lgwrap{width:100%;max-width:400px;display:grid;gap:16px}
+.lgwrap .logo{width:52px;height:52px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:700;font-size:22px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quick button{border:2px solid var(--line);background:#fff;border-radius:16px;padding:20px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:18px;transition:border-color .15s,background .15s}
+.quick button:hover{border-color:var(--green-2);background:var(--green-soft)}
+.quick .av{width:50px;height:50px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:20px}
+.quick small{font-weight:500;color:var(--muted);font-size:12px}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+.or:before,.or:after{content:"";flex:1;border-top:1px solid var(--line)}
+.nexthead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:13px}
+.nexthead a{color:var(--green);font-weight:600;text-decoration:none}
+.homeacts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.hact{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:#fff;box-shadow:var(--shadow);text-decoration:none;color:var(--ink);border:1.5px solid transparent;transition:border-color .15s,transform .15s}
+.hact:hover{border-color:var(--green-2);transform:translateY(-1px)}
+.hact .ic{width:42px;height:42px;border-radius:12px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;flex:none}
+.hact .ic svg{width:22px;height:22px}
+.hact b{display:block;font-size:15.5px;line-height:1.3}
+.hact small{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+.hact i{margin-left:auto;font-style:normal;font-size:22px;line-height:1;color:var(--muted)}
+.hact.primary{background:var(--green);color:#fff}
+.hact.primary .ic{background:rgba(255,255,255,.18);color:#fff}
+.hact.primary small,.hact.primary i{color:rgba(255,255,255,.85)}
+.newform{display:grid;gap:20px}
+.newform .lab{font-weight:600;margin-bottom:8px;display:block}
+.newform .lab em{color:var(--busy);font-style:normal}
+.optgrid{display:flex;gap:8px;flex-wrap:wrap}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 14px;font-weight:600;font-size:14px;text-align:left;line-height:1.35;font-variant-numeric:tabular-nums}
+.opt small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.opt.on{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+.opt.on small{color:var(--green-2)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin:10px 0 6px}
+.slot{border:1.5px solid #bfe3cc;background:var(--ok-soft);color:var(--ok);border-radius:9px;padding:7px 2px;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.slot:hover{border-color:var(--ok)}
+.slot.busy{background:var(--busy-soft);color:#c97a7a;border-color:transparent;cursor:not-allowed;text-decoration:line-through}
+.slot.mine{background:var(--mine-soft);color:var(--mine);border-color:transparent;cursor:not-allowed}
+.slot.past,.slot.closed{background:#eceae5;color:#b0aea8;border-color:transparent;cursor:not-allowed}
+.slot.on{background:var(--sel);color:#fff;border-color:var(--sel)}
+
 /* ---------- responsive ---------- */
 @media (max-width:900px){
   #view-login{grid-template-columns:1fr}
@@ -245,6 +284,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
   .bk .acts{grid-column:1/-1;justify-content:stretch}
   .bk .acts .btn{flex:1}
   .admin-grid{grid-template-columns:1fr}
+  .hact{padding:12px;gap:10px}
+  .hact .ic{width:36px;height:36px;border-radius:10px}
+  .hact b{font-size:14.5px}
+  .hact i{display:none}
+  .opt{flex:1 1 calc(50% - 8px)}
   .stage-hint{display:none}
   #toast{bottom:84px}
 }
@@ -260,16 +304,20 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
     <div class="chips"><span>ห้องใหญ่ 1 ห้อง</span><span>ห้องกลาง 2 ห้อง</span><span>ห้องเล็ก 5 ห้อง</span><span>Zone A · open 24 hours</span></div>
   </div>
   <div class="login-box">
-    <form id="loginForm" autocomplete="off">
+    <div class="lgwrap">
       <div class="logo">พ</div>
-      <div><h1>เข้าสู่ระบบ</h1><p class="sub" style="margin:0">ใช้รหัสผู้ใช้ของห้องสมุด</p></div>
-      <label class="f">รหัสผู้ใช้ (User ID)<input type="text" id="lgUser" required autocapitalize="none"></label>
-      <label class="f">รหัสผ่าน<input type="password" id="lgPw" required></label>
-      <div id="lgErr" class="notice err hidden"></div>
-      <button class="btn block" type="submit">เข้าสู่ระบบ</button>
-      <div class="demo-users">บัญชีทดลอง (รหัสผ่าน <code>1234</code> ทุกบัญชี)<br>
-        ผู้ใช้: <code>user</code> · <code>doctor01</code> · <code>nurse01</code> · <code>student02</code><br>ผู้ดูแล: <code>admin</code></div>
-    </form>
+      <div><h1>เข้าสู่ระบบ</h1><p class="sub" style="margin:0">ระบบทดสอบ — กดเลือกผู้ใช้ทดสอบได้ทันที ไม่ต้องใส่รหัส</p></div>
+      <div class="quick">
+        <button type="button" data-login="user1"><span class="av">1</span>User 1<small>ผู้ใช้ทดสอบ</small></button>
+        <button type="button" data-login="user2"><span class="av">2</span>User 2<small>ผู้ใช้ทดสอบ</small></button>
+      </div>
+      <div class="or">ผู้ดูแลระบบ</div>
+      <form id="adminForm" autocomplete="off" style="display:grid;gap:10px">
+        <label class="f">รหัสผ่านผู้ดูแล (admin)<input type="password" id="lgPw" required inputmode="numeric"></label>
+        <div id="lgErr" class="notice err hidden"></div>
+        <button class="btn ghost block" type="submit">เข้าสู่ระบบผู้ดูแล</button>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -281,21 +329,28 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
     <div class="userchip"><span class="clock" id="clock"></span><div class="av" id="uAv"></div><span class="nm" id="uName"></span><button id="logoutBtn" title="ออกจากระบบ">ออก</button></div>
   </header>
 
-  <!-- SEARCH -->
-  <main id="view-search" class="hidden">
-    <h1>ค้นหาห้องว่าง</h1>
-    <p class="sub">เลือกวันที่และช่วงเวลา แล้วกดค้นหา ระบบจะแสดงจำนวนห้องที่ว่าง</p>
-    <div class="card">
-      <div class="steps"><span><b>1</b> เลือกวันที่</span><span><b>2</b> เลือกเวลา</span><span><b>3</b> กดค้นหา</span><span><b>4</b> เลือกห้องในผัง 3D แล้วจอง</span></div>
-      <form class="search-card" id="searchForm">
-        <label class="f d">วันที่<input type="date" id="sDate" required></label>
-        <label class="f">เวลาเริ่ม<select id="sStart"></select></label>
-        <label class="f">ระยะเวลา<select id="sHours"></select></label>
-        <button class="btn" type="submit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>ค้นหา</button>
-      </form>
-      <div id="sNote" class="muted" style="font-size:13px;margin-top:10px"></div>
+  <!-- HOME -->
+  <main id="view-home" class="hidden">
+    <h1 id="hello"></h1>
+    <p class="sub">เลือกสิ่งที่ต้องการทำ</p>
+    <div id="homeNext"></div>
+    <div class="homeacts">
+      <a href="#new" class="hact primary"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span><b>เพิ่มการจอง</b><small>เลือกวัน–เวลา แล้วเลือกห้องในผัง 3D</small></span><i>›</i></a>
+      <a href="#history" class="hact"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg></span><span><b>ประวัติการจอง</b><small id="hPast"></small></span><i>›</i></a>
     </div>
-    <div id="results"></div>
+  </main>
+
+  <!-- NEW BOOKING -->
+  <main id="view-new" class="hidden">
+    <h1>เพิ่มการจองใหม่</h1>
+    <p class="sub">เลือกวันที่และช่วงเวลา แล้วกดค้นหา ระบบจะพาไปเลือกห้องว่างในผัง 3D (จองเป็นช่วงละ 1 ชั่วโมง)</p>
+    <form class="card newform" id="searchForm" novalidate>
+      <div><span class="lab">1. วันที่ <em>*</em></span><input type="date" id="sDate" required style="width:100%;max-width:260px"></div>
+      <div><span class="lab">2. เวลา</span><div class="optgrid" id="sRange"></div></div>
+      <div id="sErr" class="notice err hidden"></div>
+      <div class="row"><button class="btn" type="submit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>ค้นหาห้องว่าง</button>
+        <span id="sNote" class="muted" style="font-size:13px"></span></div>
+    </form>
   </main>
 
   <!-- 3D MAP -->
@@ -313,20 +368,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
         <span><i style="background:var(--busy)"></i>ไม่ว่าง</span>
         <span><i style="background:var(--mine)"></i>การจองของฉัน</span>
         <span><i style="background:var(--sel)"></i>ที่เลือก</span>
-        <span><i style="background:#9aa095"></i>ไม่ตรงประเภท</span>
+        <span><i style="background:#9aa095"></i>ไม่ตรงขนาด</span>
       </div>
     </div>
     <aside class="panel">
       <div class="sec">
-        <div class="row" style="justify-content:space-between;margin-bottom:8px"><b>ช่วงเวลาที่ต้องการ</b><span id="mClosed"></span></div>
-        <div class="mini">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px"><b>วันที่และช่วงเวลา</b><span id="mClosed"></span></div>
+        <div class="mini" style="grid-template-columns:1fr 1fr">
           <input type="date" id="mDate">
-          <select id="mStart"></select>
-          <select id="mHours"></select>
+          <select id="mRange"></select>
         </div>
       </div>
       <div class="sec">
-        <b style="display:block;margin-bottom:8px">ประเภทห้อง</b>
+        <b style="display:block;margin-bottom:8px">ขนาดห้อง</b>
         <div class="chips" id="typeChips"></div>
       </div>
       <div class="sec">
@@ -340,9 +394,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 
   <!-- MY BOOKINGS -->
   <main id="view-mine" class="hidden">
-    <h1>ข้อมูลการจองของฉัน</h1>
+    <h1 id="mineTitle"></h1>
     <p class="sub" id="mineSub"></p>
-    <div class="seg"><button data-t="up" class="on">ยังไม่ถึง / กำลังใช้</button><button data-t="past">ผ่านไปแล้ว</button></div>
     <div class="grid" id="mineList"></div>
   </main>
 
@@ -410,11 +463,10 @@ import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer
    ข้อมูลพื้นฐาน (จำลอง) — ระบบจริงต้องย้ายไปฝั่ง server
    ========================================================= */
 const USERS = [
-  { id:'user',      pw:'1234', name:'ผู้ใช้ทดสอบ',      dept:'นักศึกษาแพทย์ ชั้นปีที่ 5', role:'user' },
-  { id:'doctor01',  pw:'1234', name:'พญ.ทดสอบ หนึ่ง',  dept:'แพทย์ใช้ทุน',             role:'user' },
-  { id:'nurse01',   pw:'1234', name:'พยาบาล ทดสอบ',     dept:'ฝ่ายการพยาบาล',           role:'user' },
-  { id:'student02', pw:'1234', name:'นศพ.ทดสอบ สอง',    dept:'นักศึกษาแพทย์ ชั้นปีที่ 6', role:'user' },
-  { id:'admin',     pw:'1234', name:'ผู้ดูแลระบบ',      dept:'งานห้องสมุด',             role:'admin' },
+  { id:'user1', name:'User 1', dept:'ผู้ใช้ทดสอบ', role:'user' },
+  { id:'user2', name:'User 2', dept:'ผู้ใช้ทดสอบ', role:'user' },
+  { id:'other', name:'ผู้ใช้อื่น (จำลอง)', dept:'ข้อมูลตัวอย่าง', role:'other' },
+  { id:'admin', pw:'1234', name:'ผู้ดูแลระบบ', dept:'งานห้องสมุด', role:'admin' },   // ระบบทดสอบ: admin ใช้รหัส 1234
 ];
 const userById = id => USERS.find(u => u.id === id);
 
@@ -452,34 +504,36 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 function dur(ms){ const m = Math.max(0,Math.round(ms/60000)); const h = Math.floor(m/60), mm = m%60; return h ? `${h} ชม. ${mm} นาที` : `${mm} นาที`; }
 
 /* ---------- storage ---------- */
-const KEY = 'budhlib.booking.v1';
+const KEY = 'budhlib.booking.v2';
 let db = load();
 function load(){
-  try { const r = JSON.parse(localStorage.getItem(KEY)); if (r && r.v === 1) return r; } catch {}
+  try { const r = JSON.parse(localStorage.getItem(KEY)); if (r && r.v === 2) return r; } catch {}
   return seed();
 }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(db)); } catch {} }
 function seed(){
   const t = new Date(); const day = k => { const d = new Date(t); d.setDate(d.getDate()+k); return ymd(d); };
-  const d = { v:1, seq:1, bookings:[], doorLog:[],
+  const d = { v:2, seq:1, bookings:[], doorLog:[],
     settings:{ maxHoursPerDay:1, openBeforeMin:10, openHour:0, closeHour:24, closedWeekdays:[], closedDates:[], clockOffset:0 } };
   // วันปิดตัวอย่าง: 1 วันในอีก ~10 วันข้างหน้า
   d.settings.closedDates.push({ date: day(10), note:'ปิดปรับปรุงระบบไฟฟ้า (ตัวอย่าง)' });
-  const add = (roomId,date,start,end,userId) => d.bookings.push({ id:'BK'+pad(d.seq++).padStart(4,'0'), roomId, date, start, end, userId,
+  const add = (roomId,date,start,end,userId) => d.bookings.push({ id:'BK'+String(d.seq++).padStart(4,'0'), roomId, date, start, end, userId,
     status:'active', createdAt:new Date().toISOString(), createdBy:userId, transfers:[], opens:[] });
   const h = t.getHours();
   const hh = k => Math.min(23, Math.max(0, h + k));
-  add('S2', day(0), hh(0), hh(0)+1, 'doctor01');
-  add('M1', day(0), hh(0), hh(0)+1, 'nurse01');
-  add('S4', day(0), hh(1), hh(1)+1, 'student02');
-  add('L1', day(0), hh(1), hh(1)+1, 'doctor01');
-  add('S1', day(0), hh(2), hh(2)+1, 'nurse01');
-  add('M2', day(1), 10, 11, 'doctor01');
-  add('S3', day(1), 13, 14, 'student02');
-  add('S3', day(2), 14, 15, 'user');           // การจองที่ยังไม่ถึง
-  add('S5', day(-1), 9, 10, 'user');           // การจองที่ผ่านไปแล้ว
-  add('M1', day(-3), 15, 16, 'user');
-  d.bookings.find(b => b.roomId==='S5' && b.userId==='user').opens.push(new Date(atHour(day(-1),9).getTime()-5*60000).toISOString());
+  // การจองของผู้ใช้อื่น เพื่อให้ผังมีห้องไม่ว่าง
+  add('S2', day(0), hh(0), hh(0)+1, 'other');
+  add('M1', day(0), hh(0), hh(0)+1, 'other');
+  add('S4', day(0), hh(1), hh(1)+1, 'other');
+  add('L1', day(0), hh(1), hh(1)+1, 'other');
+  add('S1', day(0), hh(2), hh(2)+1, 'other');
+  for (const [r,s] of [['S1',9],['S2',10],['S3',13],['M1',8],['M2',14],['L1',10],['S5',16]]) add(r, day(1), s, s+1, 'other');
+  add('M2', day(1), 10, 11, 'user2');
+  add('S3', day(2), 14, 15, 'user1');          // การจองที่ยังไม่ถึง
+  add('S5', day(-1), 9, 10, 'user1');          // การจองที่ผ่านไปแล้ว
+  add('M1', day(-3), 15, 16, 'user1');
+  add('L1', day(-2), 13, 14, 'user2');
+  d.bookings.find(b => b.roomId==='S5' && b.userId==='user1').opens.push(new Date(atHour(day(-1),9).getTime()-5*60000).toISOString());
   localStorage.setItem(KEY, JSON.stringify(d));
   return d;
 }
@@ -536,43 +590,53 @@ function bookingPhase(b){
 /* =========================================================
    สถานะ UI
    ========================================================= */
-const state = { user:null, date:'', start:0, hours:1, type:'all', sel:null, mineTab:'up', calMonth:null, adminDate:'' };
+// ช่วงเวลาให้เลือกตอนค้นหา (ตัวเลือกลงท้าย :00 ส่วนช่องจองจริงแสดงเป็น :00–:59)
+const RANGES = [
+  { k:'any',   label:'เวลาใดก็ได้',   sub:'ทั้งวัน',          s:0,  e:24 },
+  { k:'r1',    label:'08:00 – 12:00', sub:'ช่วงเช้า',         s:8,  e:12 },
+  { k:'r2',    label:'12:00 – 16:00', sub:'ช่วงบ่าย',         s:12, e:16 },
+  { k:'r3',    label:'16:00 – 24:00', sub:'ช่วงเย็น–ค่ำ',      s:16, e:24 },
+  { k:'r4',    label:'24:00 – 08:00', sub:'หลังเที่ยงคืน (00:00–07:59)', s:0, e:8 },
+];
+const SIZES = [
+  { k:'all', label:'ขนาดใดก็ได้', sub:'ทุกห้อง' },
+  { k:'S', label:'S · ห้องเล็ก',  sub:TYPES.S.cap },
+  { k:'M', label:'M · ห้องกลาง', sub:TYPES.M.cap },
+  { k:'L', label:'L · ห้องใหญ่',  sub:TYPES.L.cap },
+];
+const rangeOf = k => RANGES.find(r => r.k === k) || RANGES[0];
+const slotLabel = h => `${pad(h)}:00–${pad(h)}:59`;
+const state = { user:null, date:'', range:'any', type:'all', sel:null, slots:[], view:'home', calMonth:null, adminDate:'' };
 
-function defaultSlot(){
-  const n = now(); let d = ymd(n); let h = n.getHours();
-  if (h < S().openHour) h = S().openHour;
-  if (h >= S().closeHour) { const t = new Date(n); t.setDate(t.getDate()+1); d = ymd(t); h = S().openHour; }
-  state.date = d; state.start = h; state.hours = 1;
+// ชั่วโมงในช่วงที่เลือก (ตัดด้วยเวลาเปิดให้จองของ admin)
+function rangeHours(){
+  const r = rangeOf(state.range), out = [];
+  for (let h = Math.max(r.s, S().openHour); h < Math.min(r.e, S().closeHour); h++) out.push(h);
+  return out;
 }
-function hourOptions(sel, date, cur){
-  const n = now(); const today = date === ymd(n);
-  let html = '';
-  for (let h = S().openHour; h < S().closeHour; h++){
-    const past = today && h < n.getHours();
-    html += `<option value="${h}" ${h===cur?'selected':''} ${past?'disabled':''}>${pad(h)}:00 น.</option>`;
-  }
-  sel.innerHTML = html;
+// สถานะของช่อง 1 ชั่วโมง: free | busy | mine | past | closed
+function slotState(roomId, h){
+  if (closedReason(state.date)) return 'closed';
+  if (atHour(state.date, h+1) <= now()) return 'past';
+  const b = busyBy(roomId, state.date, h, h+1);
+  if (b) return b.userId === state.user.id ? 'mine' : 'busy';
+  return 'free';
 }
-function durOptions(sel, start, cur){
-  const max = Math.max(1, Math.min(S().maxHoursPerDay, S().closeHour - start));
-  let html = '';
-  for (let k = 1; k <= max; k++) html += `<option value="${k}" ${k===cur?'selected':''}>${k} ชั่วโมง (ถึง ${pad(start+k-1)}:59)</option>`;
-  sel.innerHTML = html;
-  if (cur > max) state.hours = max;
-}
-function clampSlot(){
-  const n = now();
-  if (state.date === ymd(n) && state.start < n.getHours()) state.start = Math.max(n.getHours(), S().openHour);
-  state.start = Math.min(Math.max(state.start, S().openHour), S().closeHour - 1);
-  state.hours = Math.max(1, Math.min(state.hours, S().maxHoursPerDay, S().closeHour - state.start));
-}
+const freeSlots = roomId => rangeHours().filter(h => slotState(roomId, h) === 'free');
 function availability(){
   const map = {};
   for (const r of ROOMS){
-    const b = busyBy(r.id, state.date, state.start, state.start + state.hours);
-    map[r.id] = !b ? 'ok' : (b.userId === state.user.id ? 'mine' : 'busy');
+    const hs = rangeHours();
+    map[r.id] = hs.some(h => slotState(r.id,h) === 'free') ? 'ok' : hs.some(h => slotState(r.id,h) === 'mine') ? 'mine' : 'busy';
   }
   return map;
+}
+function searchError(){
+  if (!state.date) return 'กรุณาเลือกวันที่';
+  const cr = closedReason(state.date); if (cr) return cr;
+  if (!rangeHours().length) return `ช่วงเวลานี้อยู่นอกเวลาเปิดให้จอง (${pad(S().openHour)}:00–${pad(S().closeHour)}:00 น.)`;
+  if (atHour(state.date, rangeHours().at(-1) + 1) <= now()) return 'ช่วงเวลานี้ผ่านไปแล้ว';
+  return null;
 }
 
 /* ---------- toast / modal ---------- */
@@ -593,52 +657,66 @@ function modal(html, bind){
    Auth + routing
    ========================================================= */
 const NAV = [
-  { k:'search', t:'ค้นหาห้อง', i:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
-  { k:'map',    t:'ผัง 3D',    i:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>' },
-  { k:'mine',   t:'การจองของฉัน', i:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>' },
-  { k:'admin',  t:'ผู้ดูแล', i:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.6H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 4.6V4.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.1.7Z"/>', admin:true },
+  { k:'home',     t:'หน้าหลัก',     i:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>' },
+  { k:'new',      t:'จองใหม่',      i:'<path d="M12 5v14M5 12h14"/>', also:['map'] },
+  { k:'upcoming', t:'กำลังมาถึง',    i:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>' },
+  { k:'history',  t:'ประวัติ',       i:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>' },
+  { k:'admin',    t:'ผู้ดูแล', i:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.6H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 4.6V4.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.1.7Z"/>', admin:true },
 ];
+const VIEWS = ['home','new','map','upcoming','history','admin'];
+const viewEl = v => $('#view-' + (v === 'upcoming' || v === 'history' ? 'mine' : v));
 function renderNav(cur){
   const items = NAV.filter(n => !n.admin || state.user.role === 'admin');
-  $('#topnav').innerHTML = items.map(n => `<a href="#${n.k}" class="${n.k===cur?'on':''}">${n.t}</a>`).join('');
-  $('#botnav').innerHTML = items.map(n => `<a href="#${n.k}" class="${n.k===cur?'on':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${n.i}</svg>${n.t}</a>`).join('');
+  const on = n => n.k === cur || n.also?.includes(cur) ? 'on' : '';
+  $('#topnav').innerHTML = items.map(n => `<a href="#${n.k}" class="${on(n)}">${n.t}</a>`).join('');
+  $('#botnav').innerHTML = items.map(n => `<a href="#${n.k}" class="${on(n)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${n.i}</svg>${n.t}</a>`).join('');
 }
-function login(uid){
+function login(uid, restore){
   state.user = userById(uid);
   try { sessionStorage.setItem('budhlib.session', uid); } catch {}
   $('#view-login').classList.add('hidden'); $('#shell').classList.remove('hidden');
-  $('#uAv').textContent = state.user.name.replace(/^(พญ\.|นศพ\.|นพ\.)/,'').trim().charAt(0);
-  $('#uName').textContent = `${state.user.name} (${state.user.id})`;
-  defaultSlot();
-  if (!location.hash || location.hash === '#login') location.hash = '#search'; else route();
+  $('#uAv').textContent = state.user.role === 'admin' ? 'A' : state.user.name.slice(-1);
+  $('#uName').textContent = state.user.name;
+  Object.assign(state, { date:'', range:'any', type:'all', sel:null, slots:[] });
+  if (restore || location.hash === '#home') route(); else location.hash = '#home';
 }
 function logout(){
   try { sessionStorage.removeItem('budhlib.session'); } catch {}
-  state.user = null; $('#shell').classList.add('hidden'); $('#view-login').classList.remove('hidden');
-  location.hash = '#login'; three.running = false;
+  state.user = null; three.running = false;
+  $('#shell').classList.add('hidden'); $('#view-login').classList.remove('hidden');
+  history.replaceState(null, '', location.pathname);
 }
-$('#loginForm').addEventListener('submit', e => {
+$$('[data-login]').forEach(b => b.onclick = () => login(b.dataset.login));
+$('#adminForm').addEventListener('submit', e => {
   e.preventDefault();
-  const id = $('#lgUser').value.trim().toLowerCase(), pw = $('#lgPw').value;
-  const u = USERS.find(x => x.id === id && x.pw === pw);
-  if (!u){ $('#lgErr').textContent = 'รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'; $('#lgErr').classList.remove('hidden'); return; }
+  if ($('#lgPw').value !== userById('admin').pw){ $('#lgErr').textContent = 'รหัสผ่านผู้ดูแลไม่ถูกต้อง'; $('#lgErr').classList.remove('hidden'); return; }
   $('#lgErr').classList.add('hidden'); $('#lgPw').value = '';
-  login(u.id);
+  login('admin');
 });
 $('#logoutBtn').onclick = logout;
 
 function route(){
   if (!state.user) return;
-  let v = location.hash.slice(1) || 'search';
-  if (!['search','map','mine','admin'].includes(v) || (v === 'admin' && state.user.role !== 'admin')) v = 'search';
-  ['search','map','mine','admin'].forEach(k => $('#view-'+k).classList.toggle('hidden', k !== v));
+  let v = location.hash.slice(1) || 'home';
+  if (!VIEWS.includes(v) || (v === 'admin' && state.user.role !== 'admin')) v = 'home';
+  if (v === 'map' && !state.date) { location.replace('#new'); return; }   // ต้องผ่านการค้นหาก่อน
+  state.view = v;
+  ['home','new','map','mine','admin'].forEach(k => $('#view-'+k).classList.add('hidden'));
+  viewEl(v).classList.remove('hidden');
   renderNav(v);
   three.running = v === 'map';
-  if (v === 'search') renderSearch();
-  if (v === 'map') { renderMap(); initThree(); three.running = true; three.resize(); }
-  if (v === 'mine') renderMine();
-  if (v === 'admin') renderAdmin();
+  rerender();
+  if (v === 'map') { initThree(); three.running = true; three.resize(); }
   window.scrollTo(0,0);
+}
+function rerender(){
+  tickClock();
+  const v = state.view;
+  if (v === 'home') renderHome();
+  if (v === 'new') renderSearch();
+  if (v === 'map') renderMap();
+  if (v === 'upcoming' || v === 'history') renderMine();
+  if (v === 'admin') renderAdmin();
 }
 window.addEventListener('hashchange', route);
 
@@ -650,107 +728,122 @@ function tickClock(){
 setInterval(() => {
   if (!state.user) return;
   tickClock();
-  if (!$('#view-mine').classList.contains('hidden') && !$('#modalRoot').innerHTML) renderMine();
+  if (['home','upcoming','history'].includes(state.view) && !$('#modalRoot').innerHTML) rerender();
 }, 15000);
 
 /* =========================================================
-   หน้า ค้นหา
+   รายการจองของผู้ใช้
    ========================================================= */
-let searched = false;
+function myLists(){
+  const me = state.user.id;
+  const mine = db.bookings.filter(b => b.userId === me);
+  const gaveAway = db.bookings.filter(b => b.userId !== me && b.transfers.some(t => t.from === me));
+  const up = mine.filter(b => b.status === 'active' && bookingPhase(b) !== 'done').sort((a,b) => atHour(a.date,a.start) - atHour(b.date,b.start));
+  const past = [...mine.filter(b => !up.includes(b)), ...gaveAway].sort((a,b) => atHour(b.date,b.start) - atHour(a.date,a.start));
+  return { up, past };
+}
+
+/* =========================================================
+   หน้าหลัก
+   ========================================================= */
+function renderHome(){
+  const { up, past } = myLists();
+  $('#hello').textContent = `สวัสดี ${state.user.name}`;
+  $('#hPast').textContent = `${past.length} รายการ`;
+  const next = up[0];
+  const more = up.length > 1 ? `<a href="#upcoming">ดูทั้งหมด ${up.length} รายการ ›</a>` : '';
+  $('#homeNext').innerHTML = `<div style="margin-bottom:16px"><div class="nexthead"><span class="muted">การจองถัดไปของคุณ</span>${more}</div>
+    ${next ? bkCard(next, false) : '<div class="card muted" style="padding:16px 20px">ยังไม่มีการจองที่กำลังมาถึง</div>'}</div>`;
+  bindCards($('#homeNext'));
+}
+
+/* =========================================================
+   หน้า เพิ่มการจองใหม่ (ค้นหา)
+   ========================================================= */
+function optButtons(el, list, cur, onPick){
+  el.innerHTML = list.map(o => `<button type="button" class="opt ${o.k===cur?'on':''}" data-k="${o.k}">${o.label}<small>${o.sub}</small></button>`).join('');
+  el.querySelectorAll('.opt').forEach(b => b.onclick = () => onPick(b.dataset.k));
+}
 function renderSearch(){
-  tickClock(); clampSlot();
-  const n = now();
-  $('#sDate').min = ymd(n);
+  $('#sDate').min = ymd(now());
   $('#sDate').value = state.date;
-  hourOptions($('#sStart'), state.date, state.start);
-  durOptions($('#sHours'), state.start, state.hours);
-  const used = usedHours(state.user.id, state.date);
-  $('#sNote').innerHTML = `สิทธิ์ของคุณ: จองได้สูงสุด <b>${S().maxHoursPerDay} ชม./วัน</b> · วันที่เลือกใช้ไปแล้ว ${used} ชม. · กดเปิดประตูได้ก่อนเวลา ${S().openBeforeMin} นาที`;
-  if (searched) renderResults(); else $('#results').innerHTML = '';
+  optButtons($('#sRange'), RANGES, state.range, k => { state.range = k; renderSearch(); });
+  const used = state.date ? usedHours(state.user.id, state.date) : 0;
+  $('#sNote').innerHTML = `สิทธิ์: จองได้สูงสุด <b>${S().maxHoursPerDay} ชม./วัน</b>${state.date ? ` · วันที่เลือกใช้ไปแล้ว ${used} ชม.` : ''}`;
+  $('#sErr').classList.add('hidden');
 }
 $('#sDate').addEventListener('change', e => { state.date = e.target.value; renderSearch(); });
-$('#sStart').addEventListener('change', e => { state.start = +e.target.value; renderSearch(); });
-$('#sHours').addEventListener('change', e => { state.hours = +e.target.value; renderSearch(); });
-$('#searchForm').addEventListener('submit', e => { e.preventDefault(); searched = true; renderResults(); $('#results').scrollIntoView({behavior:'smooth', block:'start'}); });
-
-function renderResults(){
-  const err = slotError(state.date, state.start, state.start + state.hours);
-  const head = `<div class="muted" style="font-size:14px">${thDate(state.date,{weekday:'long'})} · ${fmtRange(state.start, state.start+state.hours)}</div>`;
-  if (err){ $('#results').innerHTML = `<div class="result-head">${head}</div><div class="notice err">${esc(err)}</div>`; return; }
-  const av = availability();
-  const free = ROOMS.filter(r => av[r.id] === 'ok').length;
-  const used = usedHours(state.user.id, state.date), left = S().maxHoursPerDay - used;
-  const quota = left < state.hours ? `<div class="notice warn" style="margin-bottom:14px">วันนี้คุณใช้สิทธิ์ไปแล้ว ${used} ชม. จากสูงสุด ${S().maxHoursPerDay} ชม./วัน — ดูห้องได้แต่จองเพิ่มไม่ได้</div>` : '';
-  const cards = ['L','M','S'].map(t => {
-    const rs = ROOMS.filter(r => r.type === t), f = rs.filter(r => av[r.id] === 'ok').length;
-    return `<button class="tcard ${f?'':'zero'}" data-type="${t}">
-      <div class="row" style="width:100%;justify-content:space-between"><div class="ico"><b>${TYPES[t].icon}</b></div><div class="cnt">${f}<small> / ${rs.length} ห้องว่าง</small></div></div>
-      <div><div class="ttl">${TYPES[t].label}</div><div class="meta">${TYPES[t].cap} · ${TYPES[t].equip}</div></div>
-      <div class="roomdots">${rs.map(r => `<i class="${av[r.id]==='ok'?'ok':'busy'}">${r.id}</i>`).join('')}</div>
-      <div class="go">ดูในผัง 3D และจอง ›</div></button>`;
-  }).join('');
-  $('#results').innerHTML = `<div class="result-head"><div><div class="bignum">${free}</div><div class="muted">ห้องว่าง</div></div>
-    <div style="flex:1">${head}<div style="font-weight:600">พบห้องว่าง ${free} จาก ${ROOMS.length} ห้อง</div></div>
-    <a class="btn" href="#map">เปิดผัง 3D ทั้งหมด ›</a></div>${quota}<div class="types">${cards}</div>`;
-  $$('#results .tcard').forEach(c => c.onclick = () => { state.type = c.dataset.type; state.sel = null; location.hash = '#map'; });
-}
+// กดค้นหา → ไปผัง 3D ทันที (เลือกขนาดห้องได้ในหน้าผัง)
+$('#searchForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const err = state.date ? searchError() : 'กรุณาเลือกวันที่ก่อนค้นหา';
+  if (err){ $('#sErr').textContent = err; $('#sErr').classList.remove('hidden'); if (!state.date) $('#sDate').focus(); return; }
+  state.type = 'all'; state.sel = null; state.slots = [];
+  const free = Object.values(availability()).filter(v => v === 'ok').length;
+  location.hash = '#map';
+  toast(`พบห้องว่าง ${free} จาก ${ROOMS.length} ห้อง · ${rangeOf(state.range).label}`);
+});
 
 /* =========================================================
    หน้า ผัง 3D (panel)
    ========================================================= */
 function renderMap(){
-  clampSlot();
   $('#mDate').min = ymd(now()); $('#mDate').value = state.date;
-  hourOptions($('#mStart'), state.date, state.start);
-  durOptions($('#mHours'), state.start, state.hours);
-  const err = slotError(state.date, state.start, state.start + state.hours);
-  $('#mClosed').innerHTML = err ? `<span class="pill busy">${esc(err)}</span>` : `<span class="pill gray">${fmtRange(state.start,state.start+state.hours)}</span>`;
+  $('#mRange').innerHTML = RANGES.map(r => `<option value="${r.k}" ${r.k===state.range?'selected':''}>${r.label}${r.k==='r4'?' (00:00–07:59)':''}</option>`).join('');
+  const err = searchError();
   const av = err ? Object.fromEntries(ROOMS.map(r => [r.id,'busy'])) : availability();
+  const nFree = Object.values(av).filter(v => v === 'ok').length;
+  $('#mClosed').innerHTML = err ? `<span class="pill busy">${esc(err)}</span>` : `<span class="pill ${nFree?'ok':'busy'}">ว่าง ${nFree} / ${ROOMS.length} ห้อง</span>`;
 
   const cnt = t => ROOMS.filter(r => (t==='all'||r.type===t) && av[r.id]==='ok').length;
-  $('#typeChips').innerHTML = [['all','ทั้งหมด'],['L','ห้องใหญ่'],['M','ห้องกลาง'],['S','ห้องเล็ก']]
-    .map(([k,l]) => `<button class="chip ${state.type===k?'on':''}" data-t="${k}">${l} <b>${cnt(k)}</b></button>`).join('');
-  $$('#typeChips .chip').forEach(c => c.onclick = () => { state.type = c.dataset.t; if (state.sel && state.type !== 'all' && roomById(state.sel).type !== state.type) state.sel = null; renderMap(); if (!state.sel) three.focusType?.(state.type); });
+  $('#typeChips').innerHTML = SIZES.map(s => `<button class="chip ${state.type===s.k?'on':''}" data-t="${s.k}">${s.label} <b>${cnt(s.k)}</b></button>`).join('');
+  $$('#typeChips .chip').forEach(c => c.onclick = () => { state.type = c.dataset.t; if (state.sel && state.type !== 'all' && roomById(state.sel).type !== state.type){ state.sel = null; state.slots = []; } renderMap(); if (!state.sel) three.focusType?.(state.type); });
 
   const list = ROOMS.filter(r => state.type === 'all' || r.type === state.type);
-  const pill = s => s==='ok' ? '<span class="pill ok"><span class="dot"></span>ว่าง</span>' : s==='mine' ? '<span class="pill mine">ของฉัน</span>' : '<span class="pill busy">ไม่ว่าง</span>';
+  const pill = (s, id) => s==='ok' ? `<span class="pill ok"><span class="dot"></span>ว่าง ${freeSlots(id).length} ช่วง</span>` : s==='mine' ? '<span class="pill mine">มีการจองของฉัน</span>' : '<span class="pill busy">เต็ม</span>';
   $('#roomList').innerHTML = list.map(r => `<button class="ritem ${state.sel===r.id?'sel':''}" data-id="${r.id}">
-      <div class="code ${av[r.id]}">${r.id}</div><div><div class="nm">${r.name}</div><div class="ds">${TYPES[r.type].label} · ${TYPES[r.type].cap}</div></div>${pill(av[r.id])}</button>`).join('');
+      <div class="code ${av[r.id]}">${r.id}</div><div><div class="nm">${r.name}</div><div class="ds">${TYPES[r.type].label} · ${TYPES[r.type].cap}</div></div>${err ? '' : pill(av[r.id], r.id)}</button>`).join('');
   $$('#roomList .ritem').forEach(b => b.onclick = () => selectRoom(b.dataset.id, true));
 
-  // detail
+  // รายละเอียดห้อง + เลือกช่วงเวลา
   const det = $('#roomDetail'), btn = $('#bookBtn');
   if (!state.sel){
-    det.innerHTML = `<p class="muted" style="margin:0">คลิกห้องในผัง 3D หรือในรายการด้านบนเพื่อดูรายละเอียด</p>`;
+    det.innerHTML = `<p class="muted" style="margin:0">คลิกห้องในผัง 3D หรือในรายการด้านบน แล้วเลือกช่วงเวลาที่ต้องการ</p>`;
     btn.disabled = true; btn.textContent = 'เลือกห้องที่ว่างเพื่อจอง';
   } else {
-    const r = roomById(state.sel), st = av[r.id];
-    const b = busyBy(r.id, state.date, state.start, state.start+state.hours);
-    det.innerHTML = `<div class="row" style="justify-content:space-between"><h3>${r.name}</h3>${pill(st)}</div>
+    const r = roomById(state.sel);
+    const left = Math.max(0, S().maxHoursPerDay - usedHours(state.user.id, state.date));
+    const tip = { free:'ว่าง', busy:'ไม่ว่าง', mine:'การจองของคุณ', past:'ผ่านไปแล้ว', closed:'ปิด' };
+    const slotHtml = rangeHours().map(h => {
+      const st = slotState(r.id, h), on = state.slots.includes(h);
+      return `<button class="slot ${on ? 'on' : st}" data-h="${h}" ${st==='free'?'':'disabled'} title="${tip[st]}">${slotLabel(h)}</button>`;
+    }).join('');
+    det.innerHTML = `<div class="row" style="justify-content:space-between"><h3>${r.name}</h3>${err ? '' : pill(av[r.id], r.id)}</div>
       <dl class="kv"><dt>ประเภท</dt><dd>${TYPES[r.type].label} (${r.id})</dd><dt>ความจุ</dt><dd>${TYPES[r.type].cap}</dd>
-      <dt>ขนาด</dt><dd>${r.size}</dd><dt>อุปกรณ์</dt><dd>${TYPES[r.type].equip}</dd>
-      ${b ? `<dt>จองโดย</dt><dd>${b.userId===state.user.id?'คุณ':'ผู้ใช้อื่น'} · ${fmtRange(b.start,b.end)}</dd>` : ''}</dl>
-      <b style="font-size:13px">ตารางห้องวันที่ ${thDate(state.date)}</b>${timeline(r.id)}`;
-    const e = st === 'ok' ? bookError(state.user.id, r.id, state.date, state.start, state.start+state.hours) : (err || 'ห้องไม่ว่างในช่วงเวลานี้');
+      <dt>ขนาด</dt><dd>${r.size}</dd><dt>อุปกรณ์</dt><dd>${TYPES[r.type].equip}</dd></dl>
+      <b style="font-size:14px">เลือกช่วงเวลา · ${thDate(state.date)}</b>
+      <div class="muted" style="font-size:12px">ช่วงละ 1 ชั่วโมง · เลือกต่อเนื่องได้สูงสุด ${S().maxHoursPerDay} ชม./วัน (เหลือ ${left} ชม.)</div>
+      <div class="slots">${slotHtml || '<span class="muted">ไม่มีช่วงเวลา</span>'}</div>
+      <div class="muted" style="font-size:11px">เขียว = ว่าง · น้ำเงิน = ที่เลือก · แดง = ไม่ว่าง · ส้ม = ของฉัน · เทา = ผ่านไปแล้ว</div>`;
+    det.querySelectorAll('.slot[data-h]').forEach(b => b.onclick = () => { toggleSlot(+b.dataset.h); renderMap(); });
+    const sl = state.slots;
+    const e = !sl.length ? 'เลือกช่วงเวลาที่ต้องการจอง' : bookError(state.user.id, r.id, state.date, sl[0], sl.at(-1)+1);
     btn.disabled = !!e;
-    btn.textContent = e ? e : `จอง ${r.name} · ${fmtRange(state.start, state.start+state.hours)}`;
+    btn.textContent = e ? e : `จอง ${r.name} · ${fmtRange(sl[0], sl.at(-1)+1)}`;
   }
   three.update?.(av);
 }
-function timeline(roomId){
-  const o = S().openHour, c = S().closeHour, n = now();
-  let cells = '', ticks = '';
-  for (let h = o; h < c; h++){
-    const b = busyBy(roomId, state.date, h, h+1);
-    const q = h >= state.start && h < state.start + state.hours;
-    const past = atHour(state.date, h+1) <= n;
-    cells += `<i class="${b ? (b.userId===state.user.id?'m':'b') : q ? 'q' : past ? 'x' : ''}" title="${pad(h)}:00"></i>`;
-    ticks += `<span>${(h-o) % (c-o > 12 ? 3 : 2) === 0 ? pad(h) : ''}</span>`;
-  }
-  return `<div class="tl"><div class="cells">${cells}</div><div class="ticks">${ticks}</div></div>
-    <div class="muted" style="font-size:11px">■ น้ำเงิน = ช่วงที่เลือก · แดง = ไม่ว่าง · ส้ม = ของฉัน · เทา = ผ่านไปแล้ว</div>`;
+// เลือกช่องเวลา: ต่อเนื่องกัน และไม่เกินสิทธิ์ชั่วโมงที่เหลือ (ถ้าเกินจะเริ่มเลือกใหม่)
+function toggleSlot(h){
+  let sl = state.slots;
+  const max = Math.max(1, S().maxHoursPerDay - usedHours(state.user.id, state.date));
+  if (sl.includes(h)) sl = h === sl[0] ? sl.slice(1) : h === sl.at(-1) ? sl.slice(0,-1) : [h];
+  else if (sl.length && (h === sl[0]-1 || h === sl.at(-1)+1) && sl.length < max) sl = [...sl, h].sort((a,b) => a-b);
+  else sl = [h];
+  state.slots = sl;
 }
 function selectRoom(id, fly){
+  if (state.sel !== id) state.slots = [];
   state.sel = id;
   if (state.type !== 'all' && roomById(id).type !== state.type) state.type = 'all';
   renderMap();
@@ -758,17 +851,16 @@ function selectRoom(id, fly){
   three.select?.(id);
   if (matchMedia('(max-width:900px)').matches) $('#roomDetail').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
-$('#mDate').addEventListener('change', e => { state.date = e.target.value; renderMap(); });
-$('#mStart').addEventListener('change', e => { state.start = +e.target.value; renderMap(); });
-$('#mHours').addEventListener('change', e => { state.hours = +e.target.value; renderMap(); });
+$('#mDate').addEventListener('change', e => { if (!e.target.value) return; state.date = e.target.value; state.slots = []; renderMap(); });
+$('#mRange').addEventListener('change', e => { state.range = e.target.value; state.slots = []; renderMap(); });
 $('#bookBtn').addEventListener('click', () => {
-  const r = roomById(state.sel), s = state.start, e = s + state.hours;
+  const r = roomById(state.sel), s = state.slots[0], e = state.slots.at(-1) + 1;
   modal(`<h3>ยืนยันการจอง</h3><p class="muted" style="margin:0 0 12px">ตรวจสอบรายละเอียดก่อนกดยืนยัน</p>
     <dl class="detail kv" style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0">
       <dt class="muted">ห้อง</dt><dd style="margin:0"><b>${r.name}</b> (${TYPES[r.type].label})</dd>
       <dt class="muted">วันที่</dt><dd style="margin:0">${thDate(state.date,{weekday:'long'})}</dd>
       <dt class="muted">เวลา</dt><dd style="margin:0">${fmtRange(s,e)}</dd>
-      <dt class="muted">ผู้จอง</dt><dd style="margin:0">${esc(state.user.name)} (${state.user.id})</dd>
+      <dt class="muted">ผู้จอง</dt><dd style="margin:0">${esc(state.user.name)}</dd>
       <dt class="muted">เปิดประตู</dt><dd style="margin:0">ได้ตั้งแต่ ${hm(new Date(atHour(state.date,s) - S().openBeforeMin*60000))} น. (ถ้าห้องว่างก่อนหน้า)</dd></dl>
     <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn" id="cfm">ยืนยันการจอง</button></div>`,
   (box, close) => box.querySelector('#cfm').onclick = () => {
@@ -776,61 +868,57 @@ $('#bookBtn').addEventListener('click', () => {
     if (err){ toast(err, true); close(); renderMap(); return; }
     const b = { id:'BK'+String(db.seq++).padStart(4,'0'), roomId:r.id, date:state.date, start:s, end:e, userId:state.user.id,
       status:'active', createdAt:new Date().toISOString(), createdBy:state.user.id, transfers:[], opens:[] };
-    db.bookings.push(b); save(); close();
+    db.bookings.push(b); save(); close(); state.slots = [];
     modal(`<div style="text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 10px;font-size:32px">✓</div>
       <h3>จองสำเร็จ</h3><p class="muted">${r.name} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)}<br>รหัสการจอง <b>${b.id}</b></p></div>
-      <div class="acts" style="justify-content:center"><button class="btn ghost" data-close>จองต่อ</button><a class="btn" href="#mine" data-close>ดูการจองของฉัน</a></div>`);
+      <div class="acts" style="justify-content:center"><button class="btn ghost" data-close>จองต่อ</button><a class="btn" href="#upcoming" data-close>ดูรายการที่กำลังมาถึง</a></div>`);
     renderMap();
   });
 });
 
 /* =========================================================
-   หน้า การจองของฉัน
+   หน้า รายการจองที่กำลังมาถึง / ประวัติการจอง
    ========================================================= */
-$$('.seg button').forEach(b => b.onclick = () => { state.mineTab = b.dataset.t; renderMine(); });
-function renderMine(){
-  tickClock();
-  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.t === state.mineTab));
+function bkCard(b, pastStyle){
   const me = state.user.id, n = now();
-  const mine = db.bookings.filter(b => b.userId === me);
-  const gaveAway = db.bookings.filter(b => b.userId !== me && b.transfers.some(t => t.from === me));
-  const up = mine.filter(b => b.status === 'active' && bookingPhase(b) !== 'done').sort((a,b) => atHour(a.date,a.start) - atHour(b.date,b.start));
-  const past = [...mine.filter(b => !up.includes(b)), ...gaveAway].sort((a,b) => atHour(b.date,b.start) - atHour(a.date,a.start));
-  $('#mineSub').textContent = `${state.user.name} · ${state.user.dept} — ยังไม่ถึง ${up.length} รายการ · ผ่านไปแล้ว ${past.length} รายการ`;
-  const list = state.mineTab === 'up' ? up : past;
-  if (!list.length){
-    $('#mineList').innerHTML = `<div class="card empty">${state.mineTab==='up' ? 'ยังไม่มีการจองที่กำลังจะถึง<br><br><a class="btn" href="#search">ค้นหาห้องว่าง</a>' : 'ยังไม่มีประวัติการจอง'}</div>`;
-    return;
-  }
-  $('#mineList').innerHTML = list.map(b => {
-    const r = roomById(b.roomId), d = parseYmd(b.date), ph = bookingPhase(b), w = doorWindow(b);
-    const out = b.userId !== me;
-    const fromT = b.transfers.filter(t => t.to === me).pop();
-    let badge = '', info = '', acts = '';
-    if (out){ const t = b.transfers.filter(t => t.from === me).pop(); badge = `<span class="pill gray">ส่งต่อให้ ${esc(userById(t.to)?.name||t.to)} แล้ว</span>`; }
-    else if (ph === 'cancelled') badge = '<span class="pill busy">ยกเลิกแล้ว</span>';
-    else if (ph === 'done') badge = `<span class="pill gray">เสร็จสิ้น</span>${b.opens.length ? ' <span class="pill ok">เข้าใช้ห้องแล้ว</span>' : ' <span class="pill gray">ไม่ได้เปิดประตู</span>'}`;
-    else if (ph === 'inuse'){ badge = '<span class="pill ok"><span class="dot"></span>ถึงเวลาใช้ห้อง</span>'; info = `เหลือเวลาอีก ${dur(w.en - n)}`; }
-    else if (ph === 'openable'){ badge = '<span class="pill blue">กดเปิดประตูได้แล้ว</span>'; info = `เริ่มในอีก ${dur(w.st - n)}`; }
-    else { badge = '<span class="pill mine">รอใช้งาน</span>'; info = `เปิดประตูได้ตั้งแต่ ${hm(w.from)} น. (อีก ${dur(w.from - n)})${w.early ? '' : ' · ห้องมีผู้ใช้ก่อนหน้า จึงเปิดได้ตรงเวลา'}`; }
-    if (!out && (ph === 'openable' || ph === 'inuse')) acts += `<button class="btn door" data-open="${b.id}">🔓 เปิดประตูห้อง</button>`;
-    if (!out && ph === 'upcoming' || !out && ph === 'openable') acts += `<button class="btn soft sm" data-xfer="${b.id}">↪ ส่งต่อการจอง</button><button class="btn warn sm" data-cancel="${b.id}">ยกเลิก</button>`;
-    return `<div class="card bk ${state.mineTab==='past'?'past':''}">
-      <div class="datebox"><small>${d.toLocaleDateString('th-TH',{weekday:'short'})}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString('th-TH',{month:'short'})}</small></div>
-      <div><div class="row" style="gap:8px"><span class="ttl">${r.name}</span>${badge}</div>
-        <div class="meta">${TYPES[r.type].label} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)} · รหัส ${b.id}</div>
-        ${fromT ? `<div class="meta">รับต่อจาก ${esc(userById(fromT.from)?.name||fromT.from)}</div>` : ''}
-        ${info ? `<div class="doorinfo">${info}</div>` : ''}
-        ${b.opens.length && !out ? `<div class="meta" style="font-size:12px">เปิดประตูล่าสุด ${new Date(b.opens.at(-1)).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} น.</div>` : ''}</div>
-      <div class="acts">${acts}</div></div>`;
-  }).join('');
-  $$('[data-open]').forEach(x => x.onclick = () => openDoor(x.dataset.open));
-  $$('[data-cancel]').forEach(x => x.onclick = () => cancelBooking(x.dataset.cancel));
-  $$('[data-xfer]').forEach(x => x.onclick = () => transferBooking(x.dataset.xfer));
+  const r = roomById(b.roomId), d = parseYmd(b.date), ph = bookingPhase(b), w = doorWindow(b);
+  const out = b.userId !== me;
+  const fromT = b.transfers.filter(t => t.to === me).pop();
+  let badge = '', info = '', acts = '';
+  if (out){ const t = b.transfers.filter(t => t.from === me).pop(); badge = `<span class="pill gray">ส่งต่อให้ ${esc(userById(t.to)?.name||t.to)} แล้ว</span>`; }
+  else if (ph === 'cancelled') badge = '<span class="pill busy">ยกเลิกแล้ว</span>';
+  else if (ph === 'done') badge = `<span class="pill gray">เสร็จสิ้น</span>${b.opens.length ? ' <span class="pill ok">เข้าใช้ห้องแล้ว</span>' : ' <span class="pill gray">ไม่ได้เปิดประตู</span>'}`;
+  else if (ph === 'inuse'){ badge = '<span class="pill ok"><span class="dot"></span>ถึงเวลาใช้ห้อง</span>'; info = `เหลือเวลาอีก ${dur(w.en - n)}`; }
+  else if (ph === 'openable'){ badge = '<span class="pill blue">กดเปิดประตูได้แล้ว</span>'; info = `เริ่มในอีก ${dur(w.st - n)}`; }
+  else { badge = '<span class="pill mine">รอใช้งาน</span>'; info = `เปิดประตูได้ตั้งแต่ ${hm(w.from)} น. (อีก ${dur(w.from - n)})${w.early ? '' : ' · ห้องมีผู้ใช้ก่อนหน้า จึงเปิดได้ตรงเวลา'}`; }
+  if (!out && (ph === 'openable' || ph === 'inuse')) acts += `<button class="btn door" data-open="${b.id}">🔓 เปิดประตูห้อง</button>`;
+  if (!out && (ph === 'upcoming' || ph === 'openable')) acts += `<button class="btn soft sm" data-xfer="${b.id}">↪ ส่งต่อการจอง</button><button class="btn warn sm" data-cancel="${b.id}">ยกเลิก</button>`;
+  return `<div class="card bk ${pastStyle?'past':''}">
+    <div class="datebox"><small>${d.toLocaleDateString('th-TH',{weekday:'short'})}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString('th-TH',{month:'short'})}</small></div>
+    <div><div class="row" style="gap:8px"><span class="ttl">${r.name}</span>${badge}</div>
+      <div class="meta">${TYPES[r.type].label} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)} · รหัส ${b.id}</div>
+      ${fromT ? `<div class="meta">รับต่อจาก ${esc(userById(fromT.from)?.name||fromT.from)}</div>` : ''}
+      ${info ? `<div class="doorinfo">${info}</div>` : ''}
+      ${b.opens.length && !out ? `<div class="meta" style="font-size:12px">เปิดประตูล่าสุด ${new Date(b.opens.at(-1)).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} น.</div>` : ''}</div>
+    <div class="acts">${acts}</div></div>`;
+}
+function bindCards(root){
+  root.querySelectorAll('[data-open]').forEach(x => x.onclick = () => openDoor(x.dataset.open));
+  root.querySelectorAll('[data-cancel]').forEach(x => x.onclick = () => cancelBooking(x.dataset.cancel));
+  root.querySelectorAll('[data-xfer]').forEach(x => x.onclick = () => transferBooking(x.dataset.xfer));
+}
+function renderMine(){
+  const { up, past } = myLists(), isUp = state.view === 'upcoming';
+  $('#mineTitle').textContent = isUp ? 'รายการจองที่กำลังมาถึง' : 'ประวัติการจอง';
+  $('#mineSub').textContent = isUp ? `${up.length} รายการ · กดเปิดประตูได้เมื่อถึงเวลา ส่งต่อหรือยกเลิกได้ก่อนเวลาเริ่ม` : `${past.length} รายการ · การจองที่ผ่านไปแล้ว ยกเลิก หรือส่งต่อให้ผู้อื่น`;
+  const list = isUp ? up : past;
+  $('#mineList').innerHTML = list.length ? list.map(b => bkCard(b, !isUp)).join('')
+    : `<div class="card empty">${isUp ? 'ยังไม่มีการจองที่กำลังจะถึง<br><br><a class="btn" href="#new">+ เพิ่มการจองใหม่</a>' : 'ยังไม่มีประวัติการจอง'}</div>`;
+  bindCards($('#mineList'));
 }
 function openDoor(id){
   const b = db.bookings.find(x => x.id === id), ph = bookingPhase(b);
-  if (!(ph === 'openable' || ph === 'inuse')) { toast('ยังไม่ถึงเวลาเปิดประตู', true); renderMine(); return; }
+  if (!(ph === 'openable' || ph === 'inuse')) { toast('ยังไม่ถึงเวลาเปิดประตู', true); rerender(); return; }
   const at = now().toISOString();
   b.opens.push(at); db.doorLog.unshift({ at, bookingId:b.id, roomId:b.roomId, userId:state.user.id }); save();
   // ระบบจริง: เรียก API ของตัวควบคุมประตู (access control) ที่นี่
@@ -838,7 +926,7 @@ function openDoor(id){
   modal(`<div style="text-align:center"><div class="doorani"><div class="frame"><div class="leaf"></div></div><div class="light"></div></div>
     <h3>ปลดล็อกประตูแล้ว</h3><p class="muted" style="margin:0">${r.name} · ประตูจะล็อกอัตโนมัติใน 10 วินาที<br>ใช้ห้องได้ถึง ${pad(b.end-1)}:59 น.</p></div>
     <div class="acts" style="justify-content:center"><button class="btn" data-close>ตกลง</button></div>`);
-  renderMine();
+  rerender();
 }
 function cancelBooking(id){
   const b = db.bookings.find(x => x.id === id), r = roomById(b.roomId);
@@ -846,14 +934,14 @@ function cancelBooking(id){
     <div class="acts"><button class="btn ghost" data-close>ไม่ใช่</button><button class="btn warn" id="ok">ยืนยันยกเลิก</button></div>`,
   (box, close) => box.querySelector('#ok').onclick = () => {
     if (bookingPhase(b) === 'inuse' || bookingPhase(b) === 'done'){ toast('เลยเวลาเริ่มแล้ว ยกเลิกไม่ได้', true); close(); return; }
-    b.status = 'cancelled'; b.cancelledAt = new Date().toISOString(); b.cancelledBy = state.user.id; save(); close(); toast('ยกเลิกการจองแล้ว'); renderMine();
+    b.status = 'cancelled'; b.cancelledAt = new Date().toISOString(); b.cancelledBy = state.user.id; save(); close(); toast('ยกเลิกการจองแล้ว'); rerender();
   });
 }
 function transferBooking(id){
   const b = db.bookings.find(x => x.id === id), r = roomById(b.roomId);
   const others = USERS.filter(u => u.id !== state.user.id && u.role === 'user');
   modal(`<h3>ส่งต่อการจอง</h3><p class="muted" style="margin:0 0 12px">${r.name} · ${thDate(b.date)} · ${fmtRange(b.start,b.end)}</p>
-    <label class="f">รหัสผู้ใช้ผู้รับ<input type="text" id="xUser" list="xList" placeholder="เช่น doctor01" autocapitalize="none"></label>
+    <label class="f">รหัสผู้ใช้ผู้รับ<input type="text" id="xUser" list="xList" placeholder="เช่น user2" autocapitalize="none"></label>
     <datalist id="xList">${others.map(u => `<option value="${u.id}">${esc(u.name)}</option>`).join('')}</datalist>
     <div id="xInfo" class="muted" style="font-size:13px;margin-top:6px">ผู้รับต้องมีสิทธิ์ชั่วโมงเหลือในวันนั้น และไม่มีการจองชนเวลา</div>
     <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn" id="ok">ส่งต่อ</button></div>`,
@@ -867,7 +955,7 @@ function transferBooking(id){
       const err = bookError(to, b.roomId, b.date, b.start, b.end, b.id);
       if (err){ info.innerHTML = `<span style="color:var(--busy)">${esc(err)}</span>`; return; }
       b.transfers.push({ from:state.user.id, to, at:new Date().toISOString() }); b.userId = to; save(); close();
-      toast(`ส่งต่อการจองให้ ${u.name} แล้ว`); renderMine();
+      toast(`ส่งต่อการจองให้ ${u.name} แล้ว`); rerender();
     };
   });
 }
@@ -952,7 +1040,7 @@ $('#aFakeSet').onclick = () => { const v = $('#aFake').value; if (!v) return; S(
 $('#aFakeOff').onclick = () => { S().clockOffset = 0; save(); renderAdmin(); toast('กลับไปใช้เวลาจริงแล้ว'); };
 $('#aReset').onclick = () => modal(`<h3>ล้างข้อมูลทดลอง?</h3><p class="muted">การจอง การตั้งค่า และประวัติทั้งหมดในเบราว์เซอร์นี้จะถูกรีเซ็ตเป็นค่าเริ่มต้น</p>
   <div class="acts"><button class="btn ghost" data-close>ยกเลิก</button><button class="btn warn" id="ok">ล้างข้อมูล</button></div>`,
-  (box, close) => box.querySelector('#ok').onclick = () => { localStorage.removeItem(KEY); db = seed(); close(); defaultSlot(); renderAdmin(); toast('รีเซ็ตข้อมูลแล้ว'); });
+  (box, close) => box.querySelector('#ok').onclick = () => { localStorage.removeItem(KEY); db = seed(); close(); renderAdmin(); toast('รีเซ็ตข้อมูลแล้ว'); });
 
 /* =========================================================
    3D — สร้างผังจากพิกัดบนแปลน (1 หน่วย = 1 เมตร)
@@ -1321,7 +1409,7 @@ window.addEventListener('hashchange', () => { if (location.hash === '#map' && th
 
 /* ---------- start ---------- */
 let sess = null; try { sess = sessionStorage.getItem('budhlib.session'); } catch {}
-if (sess && userById(sess)) login(sess); else { $('#view-login').classList.remove('hidden'); }
+if (sess && userById(sess)) login(sess, true); else { $('#view-login').classList.remove('hidden'); }
 </script>
 </body>
 </html>
